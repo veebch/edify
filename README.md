@@ -1,1 +1,1 @@
-# The Quote Scraper, Python Stylee
+# The Passive Daily Edification Screen
