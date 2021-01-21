@@ -1,9 +1,11 @@
 
 from time import sleep
-import argparse
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageOps
+from PIL import ImageFont
+from PIL import ImageDraw
 from sys import path
-from IT8951 import constants
+import RPi.GPIO as GPIO
+from waveshare_epd import epd2in7
 import os, random
 import textwrap
 import qrcode
@@ -16,17 +18,6 @@ import logging
 import os
 dirname = os.path.dirname(__file__)
 
-
-
-def print_system_info(display):
-    epd = display.epd
-
-    print('System info:')
-    print('  display size: {}x{}'.format(epd.width, epd.height))
-    print('  img buffer address: {:X}'.format(epd.img_buf_address))
-    print('  firmware version: {}'.format(epd.firmware_version))
-    print('  LUT version: {}'.format(epd.lut_version))
-    print()
 
 def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
     '''
@@ -50,17 +41,12 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
 
     draw.text((draw_x, draw_y), text, font=font,fill=(0,0,0) )
 
-def writewrappedlines(img,text,fontsize,y_text=-300,height=110, width=27,fontstring="Forum-Regular"):
+def writewrappedlines(img,text,fontsize,y_text=0,height=3, width=15,fontstring="Forum-Regular"):
     lines = textwrap.wrap(text, width)
     for line in lines:
-        width= 0
         _place_text(img, line,0, y_text, fontsize,fontstring)
         y_text += height
     return img
-
-def clear_display(display):
-    print('Clearing display...')
-    display.clear()
 
 def newyorkercartoon(img):
     print("Get a Cartoon")
@@ -122,24 +108,23 @@ def wordaday(img):
 
     d = feedparser.parse('https://wordsmith.org/awad/rss1.xml')
     wad = d.entries[0].title
+    print(wad)
     fontstring="Forum-Regular"
-    y_text=-200
-    height= 110
-    width= 27
-    fontsize=180
+    y_text=-40
+    height= 20
+    width= 18
+    fontsize=40
     img=writewrappedlines(img,wad,fontsize,y_text,height, width,fontstring)
     wadsummary= d.entries[0].summary
+    print(wadsummary)
     fontstring="GoudyBookletter1911-Regular"
     y_text=0
-    height= 80
-    width= 49
-    fontsize=70
+    height= 20
+    width= 30
+    fontsize=20
     img=writewrappedlines(img,wadsummary,fontsize,y_text,height, width,fontstring)
     return img
 
-def socialmetrics(img):
-    print("get social metrics")
-    return img
 
 def redditquotes(img):
     print("get reddit quotes")
@@ -210,54 +195,21 @@ def redditquotes(img):
 
     return img
 
-def display_image_8bpp(display, img):
-
-    dims = (display.width, display.height)
-    img.thumbnail(dims)
-    paste_coords = [dims[i] - img.size[i] for i in (0,1)]  # align image with bottom of display
-    img=img.rotate(180, expand=True)
-    display.frame_buf.paste(img, paste_coords)
-    display.draw_full(constants.DisplayModes.GC16)
-
-
-def parse_args():
-    p = argparse.ArgumentParser(description='Test EPD functionality')
-    p.add_argument('-v', '--virtual', action='store_true',
-                   help='display using a Tkinter window instead of the '
-                        'actual e-paper device (for testing without a '
-                        'physical device)')
-    p.add_argument('-r', '--rotate', default=None, choices=['CW', 'CCW', 'flip'],
-                   help='run the tests with the display rotated by the specified value')
-    return p.parse_args()
+def display_image(display, img):
+    img = ImageOps.mirror(img)
+    display.display_4Gray(display.getbuffer_4Gray(img))
+    display.sleep()
 
 def main():
-
-    args = parse_args()
-
     tests = []
-
-    if not args.virtual:
-        from IT8951.display import AutoEPDDisplay
-
-        print('Initializing EPD...')
-
-        # here, spi_hz controls the rate of data transfer to the device, so a higher
-        # value means faster display refreshes. the documentation for the IT8951 device
-        # says the max is 24 MHz (24000000), but my device seems to still work as high as
-        # 80 MHz (80000000)
-        display = AutoEPDDisplay(vcom=-2.69, rotate=args.rotate, spi_hz=24000000)
-
-        print('VCOM set to', display.epd.get_vcom())
-
-    else:
-        from IT8951.display import VirtualEPDDisplay
-        display = VirtualEPDDisplay(dims=(800, 600), rotate=args.rotate)
-    print_system_info(display)
-    my_list = [redditquotes,wordaday, newyorkercartoon, guardianheadlines]
-    clear_display(display)
-    img = Image.new("RGB", (1448, 1072), color = (255, 255, 255) )
+    print('Initializing EPD...')
+    epd = epd2in7.EPD()
+    epd.Init_4Gray()
+    display=epd
+    my_list = [wordaday]
+    img = Image.new("RGB", (264,176), color = (255, 255, 255) )
     img=random.choice(my_list)(img)
-    display_image_8bpp(display,img)
+    display_image(display,img)
     print('Done!')
 
 if __name__ == '__main__':
