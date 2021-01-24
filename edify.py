@@ -16,7 +16,9 @@ import unicodedata
 import re
 import logging
 import os
+import yaml
 dirname = os.path.dirname(__file__)
+configfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'config.yaml')
 
 
 def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular", fill=0):
@@ -198,21 +200,25 @@ def redditquotes(img):
 
     return img
 
-def display_image(img):
+def display_image(img, config):
     print('Initializing EPD...')
     epd = epd2in7.EPD()
     epd.Init_4Gray()
     display=epd
     img = ImageOps.mirror(img)
+    if config['screen']['invert']==True:
+        img=ImageOps.invert(img)
     display.display_4Gray(display.getbuffer_4Gray(img))
     display.sleep()
 
 def main():
+    with open(configfile) as f:
+        config = yaml.load(f, Loader=yaml.FullLoader)
     tests = []
     my_list = [wordaday,redditquotes]
     img = Image.new("RGB", (264,176), color = (255, 255, 255) )
     img=random.choice(my_list)(img)
-    display_image(img)
+    display_image(img, config)
     print('Done!')
 
 if __name__ == '__main__':
