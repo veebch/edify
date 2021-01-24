@@ -1,3 +1,2 @@
 screen:
-  invert: false
-  orientation: 90
+  invert: true
