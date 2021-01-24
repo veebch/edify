@@ -19,7 +19,7 @@ import os
 dirname = os.path.dirname(__file__)
 
 
-def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
+def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular", fill=0):
     '''
     Put some centered text at a location on the image.
     '''
@@ -39,7 +39,7 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
     draw_x = (img_width - text_width)//2 + x_offset
     draw_y = (img_height - text_height)//2 + y_offset
 
-    draw.text((draw_x, draw_y), text, font=font,fill=(0,0,0) )
+    draw.text((draw_x, draw_y), text, font=font,fill=fill )
 
 def writewrappedlines(img,text,fontsize,y_text=0,height=3, width=15,fontstring="Forum-Regular"):
     lines = textwrap.wrap(text, width)
@@ -159,17 +159,18 @@ def redditquotes(img):
         count = quote.count("\"")
         print("Count="+str(count))
         if count >= 2:
-            print("2 or more quotes - split after last one")
+            print("2 or more quotes - split after last one") # TODO: Refine substitution to hyphens outside of quotes
             sub = "\""
             wanted = "\" ~"
             n = count
+            quote= re.sub("-|—|―", " ", quote)
             quote=nth_repl(quote, sub, wanted, n)
             print(quote)
+        else:
+            quote= re.sub("\s+\"\s+", "\"", quote)
+            quote= re.sub("-|—|―", "--", quote)
 
-        quote= re.sub("\s+\"\s+", "\"", quote)
-        quote= re.sub("~|-|—|―", "--", quote)
-
-
+        quote= re.sub("~", "--", quote)
         splitquote = quote.split("--")
         quote = splitquote[0]
 
@@ -177,39 +178,41 @@ def redditquotes(img):
         quote = quote.strip("\"")
         quote = quote.strip()
 
-        if splitquote[-1]!=splitquote[0] and len(splitquote[-1])<=20:
-            fontstring = "JosefinSans-Light"
-            y_text= -300
-            height= 110
-            width= 27
-            fontsize=100
+        if splitquote[-1]!=splitquote[0] and len(splitquote[-1])<=20 and len(splitquote[0])<81:
+            fontstring = "JosefinSans-Regular"
+            y_text= -50
+            height= 30
+            width= 23
+            fontsize=23
             img=writewrappedlines(img,quote,fontsize,y_text,height, width,fontstring)
             source = splitquote[-1]
             source = source.strip()
             print(source)
+            if source=="":
+                source="Unknown"
             draw = ImageDraw.Draw(img) 
-            draw.line((500,850, 948,850), fill=0, width=3)
+            draw.line((100,144, 164,144), fill=255, width=1)
 #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
-            _place_text(img,source,0,390,80,"JosefinSans-Light")
+            _place_text(img,source,0,74,20,"JosefinSans-Regular", fill=255)
             break
 
     return img
 
-def display_image(display, img):
+def display_image(img):
+    print('Initializing EPD...')
+    epd = epd2in7.EPD()
+    epd.Init_4Gray()
+    display=epd
     img = ImageOps.mirror(img)
     display.display_4Gray(display.getbuffer_4Gray(img))
     display.sleep()
 
 def main():
     tests = []
-    print('Initializing EPD...')
-    epd = epd2in7.EPD()
-    epd.Init_4Gray()
-    display=epd
-    my_list = [wordaday]
+    my_list = [wordaday,redditquotes]
     img = Image.new("RGB", (264,176), color = (255, 255, 255) )
     img=random.choice(my_list)(img)
-    display_image(display,img)
+    display_image(img)
     print('Done!')
 
 if __name__ == '__main__':
