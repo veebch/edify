@@ -45,10 +45,12 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
 
 def writewrappedlines(img,text,fontsize,y_text=0,height=3, width=15,fontstring="Forum-Regular"):
     lines = textwrap.wrap(text, width)
+    numoflines=0
     for line in lines:
         _place_text(img, line,0, y_text, fontsize,fontstring)
         y_text += height
-    return img
+        numoflines+=1
+    return img, numoflines
 
 def newyorkercartoon(img):
     print("Get a Cartoon")
@@ -151,27 +153,25 @@ def redditquotes(img):
         quotestack[i]=result.decode()
         i+=1
     quotestack = by_size(quotestack, 140)
-    
+    print("Number of quotes retreived: "+str(len(quotestack)))
     while True:
-        quote=random.choice (quotestack)
+        quote=random.choice(quotestack)
     #   Replace rancypants quotes with vanilla quotes
         quote=re.sub("“", "\"", quote)
         quote=re.sub("”", "\"", quote)
         string = quote
         count = quote.count("\"")
-        print("Count="+str(count))
+        print("QuoteCount: "+str(count))
         if count >= 2:
-            print("2 or more quotes - split after last one") # TODO: Refine substitution to hyphens outside of quotes
             sub = "\""
             wanted = "\" ~"
             n = count
-            quote= re.sub("-|—|―", " ", quote)
+            #quote= re.sub("-|—|―", " ", quote)
             quote=nth_repl(quote, sub, wanted, n)
-            print(quote)
         else:
             quote= re.sub("\s+\"\s+", "\"", quote)
-            quote= re.sub("-|—|―", "--", quote)
-
+            quote= re.sub("\s+-|\s+—|\s+―", "--", quote)
+        print( "Quote: "+quote)
         quote= re.sub("~", "--", quote)
         splitquote = quote.split("--")
         quote = splitquote[0]
@@ -180,24 +180,28 @@ def redditquotes(img):
         quote = quote.strip("\"")
         quote = quote.strip()
 
-        if splitquote[-1]!=splitquote[0] and len(splitquote[-1])<=20 and len(splitquote[0])<81:
+        if splitquote[-1]!=splitquote[0] and len(splitquote[-1])<=25 and len(splitquote[0])<88:
+            img=Image.new("RGB", (264,176), color = (255, 255, 255) )
             fontstring = "JosefinSans-Regular"
             y_text= -50
             height= 30
-            width= 23
+            width= 21
             fontsize=23
-            img=writewrappedlines(img,quote,fontsize,y_text,height, width,fontstring)
+            img, numoflines=writewrappedlines(img,quote,fontsize,y_text,height, width,fontstring)
             source = splitquote[-1]
             source = source.strip()
-            print(source)
+            source = source.strip("-")
+            print("Source: "+source)
+            print("lines: "+str(numoflines))
             if source=="":
                 source="Unknown"
             draw = ImageDraw.Draw(img) 
             draw.line((100,144, 164,144), fill=255, width=1)
 #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
             _place_text(img,source,0,74,20,"JosefinSans-Regular", fill=255)
-            break
-
+            if numoflines<5:
+                break
+            print("Too long, trying again...")
     return img
 
 def display_image(img, config):
@@ -215,7 +219,7 @@ def main():
     with open(configfile) as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
     tests = []
-    my_list = [wordaday,redditquotes]
+    my_list = [redditquotes]
     img = Image.new("RGB", (264,176), color = (255, 255, 255) )
     img=random.choice(my_list)(img)
     display_image(img, config)
