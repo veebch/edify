@@ -179,8 +179,9 @@ def redditquotes(img):
         quote = quote.strip()
         quote = quote.strip("\"")
         quote = quote.strip()
-
-        if splitquote[-1]!=splitquote[0] and len(splitquote[-1])<=25 and len(splitquote[0])<88:
+        if len(splitquote)==1:
+            splitquote.append("")
+        if len(splitquote[-1])<=25 and len(splitquote[0])<88:
             img=Image.new("RGB", (264,176), color = (255, 255, 255) )
             fontstring = "JosefinSans-Regular"
             y_text= -50
