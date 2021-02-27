@@ -8,7 +8,6 @@ import RPi.GPIO as GPIO
 from waveshare_epd import epd2in7
 import os, random
 import textwrap
-import qrcode
 import feedparser
 import requests
 import textwrap
@@ -17,6 +16,7 @@ import re
 import logging
 import os
 import yaml
+import time
 dirname = os.path.dirname(__file__)
 configfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'config.yaml')
 
@@ -132,7 +132,7 @@ def wordaday(img):
 
 def redditquotes(img):
     print("get reddit quotes")
-    quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=day&limit=100'
+    quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=week&limit=100'
     rawquotes = requests.get(quoteurl,headers={'User-agent': 'Chrome'}).json()
     quotestack = []
     i=0
@@ -169,6 +169,12 @@ def redditquotes(img):
             #quote= re.sub("-|—|―", " ", quote)
             quote=nth_repl(quote, sub, wanted, n)
         else:
+            matchObj = re.search(r"(\.)\s(\w+)$",quote)
+            if matchObj:
+                quote= re.sub("\.\s*\w+$", " ~ "+matchObj.group(2), quote)
+            matchObj = re.search(r"\((\w+)\)$",quote)
+            if matchObj:
+                quote= re.sub("\(\w+\)$", matchObj.group(1), quote)
             quote= re.sub("\s+\"\s+", "\"", quote)
             quote= re.sub("\s+-|\s+—|\s+―", "--", quote)
         print( "Quote: "+quote)
@@ -181,7 +187,7 @@ def redditquotes(img):
         quote = quote.strip()
         if len(splitquote)==1:
             splitquote.append("")
-        if len(splitquote[-1])<=25 and len(splitquote[0])<88:
+        if len(splitquote[-1])<=25 and len(splitquote[0])<100:
             img=Image.new("RGB", (264,176), color = (255, 255, 255) )
             fontstring = "JosefinSans-Regular"
             y_text= -50
@@ -194,15 +200,14 @@ def redditquotes(img):
             source = source.strip("-")
             print("Source: "+source)
             print("lines: "+str(numoflines))
-            if source=="":
-                source="Unknown"
-            draw = ImageDraw.Draw(img) 
-            draw.line((100,144, 164,144), fill=255, width=1)
+            if source!="":
+                draw = ImageDraw.Draw(img) 
+                draw.line((100,144, 164,144), fill=255, width=1)
 #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
-            _place_text(img,source,0,74,20,"JosefinSans-Regular", fill=255)
-            if numoflines<5:
+                _place_text(img,source,0,74,20,"JosefinSans-Regular", fill=255)
+            if (numoflines<6 and source=="") or (numoflines<5 and source!=""):
                 break
-            print("Too long, trying again...")
+        print("Too long, trying again...")
     return img
 
 def display_image(img, config):
@@ -219,11 +224,12 @@ def display_image(img, config):
 def main():
     with open(configfile) as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
-    tests = []
     my_list = [redditquotes]
-    img = Image.new("RGB", (264,176), color = (255, 255, 255) )
-    img=random.choice(my_list)(img)
-    display_image(img, config)
+    while True:
+        img = Image.new("RGB", (264,176), color = (255, 255, 255) )
+        img=random.choice(my_list)(img)
+        display_image(img, config)
+        time.sleep(3600)
     print('Done!')
 
 if __name__ == '__main__':
