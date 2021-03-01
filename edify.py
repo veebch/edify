@@ -16,10 +16,27 @@ import re
 import logging
 import os
 import yaml
+import socket
 import time
+import simplejson as json
+
 dirname = os.path.dirname(__file__)
+picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images')
 configfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'config.yaml')
 
+def internet(host="8.8.8.8", port=53, timeout=3):
+    """
+    Host: 8.8.8.8 (google-public-dns-a.google.com)
+    OpenPort: 53/tcp
+    Service: domain (DNS/TCP)
+    """
+    try:
+        socket.setdefaulttimeout(timeout)
+        socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+        return True
+    except socket.error as ex:
+        logging.info("No internet")
+        return False
 
 def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular", fill=0):
     '''
@@ -219,18 +236,105 @@ def display_image(img, config):
     if config['screen']['invert']==True:
         img=ImageOps.invert(img)
     display.display_4Gray(display.getbuffer_4Gray(img))
-    display.sleep()
+#    display.sleep()
+
+def instagram(img,config):
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+    url="https://www.instagram.com/"+config['instagram']['userid']+"/channel/?__a=1"
+    print(url)
+    print('toot')
+    userdata=requests.get(url, headers=headers).json()
+    logobitmap = Image.open(os.path.join(picdir,'villavoli.bmp'))
+    followersbitmap= Image.open(os.path.join(picdir,'followers.bmp'))
+    instabitmap= Image.open(os.path.join(picdir,'instagram.bmp'))
+    print('toot')
+    followers=userdata['graphql']['user']['edge_followed_by']['count']
+    followersstring =format(int(followers),",")
+    username = userdata['graphql']['user']['username']
+    print('toot')
+    print(followersstring)
+    fontstring = "JosefinSans-Regular"
+    y_text= 60
+    height= 30
+    width= 10
+    fontsize=50
+    img, numoflines=writewrappedlines(img,followersstring,fontsize,y_text,height, width,fontstring)
+    fontstring = "JosefinSans-Light"
+    y_text= 10
+    height= 30
+    width= 20
+    fontsize=30
+    img, numoflines=writewrappedlines(img,"@"+username,fontsize,y_text,height, width,fontstring)
+    img.paste(logobitmap,(60,10))
+    img.paste(followersbitmap,(15,130))
+    img.paste(instabitmap,(10,80))
+    return img
 
 def main():
-    with open(configfile) as f:
-        config = yaml.load(f, Loader=yaml.FullLoader)
-    my_list = [redditquotes]
-    while True:
-        img = Image.new("RGB", (264,176), color = (255, 255, 255) )
-        img=random.choice(my_list)(img)
-        display_image(img, config)
-        time.sleep(3600)
-    print('Done!')
+
+    try:
+        logging.info("epd2in7 BTC Frame")
+#       Get the configuration from config.yaml
+        with open(configfile) as f:
+            config = yaml.load(f, Loader=yaml.FullLoader)
+        logging.info(config)
+
+
+        GPIO.setmode(GPIO.BCM)
+        key1 = 5
+        key2 = 6
+        key3 = 13
+        key4 = 19
+
+
+        GPIO.setup(key1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(key2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(key3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(key4, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+
+#       Note that there has been no data pull yet
+        datapulled=False 
+#       Time of start
+        lastcoinfetch = time.time()
+     
+        while True:
+
+            key1state = GPIO.input(key1)
+            key2state = GPIO.input(key2)
+            key3state = GPIO.input(key3)
+            key4state = GPIO.input(key4)
+
+            if internet():
+                if key1state == False:
+                    img = Image.new("RGB", (264,176), color = (255, 255, 255) )
+                    img=redditquotes(img)
+                    display_image(img, config)
+                if key2state == False:
+                    img = Image.new("RGB", (264,176), color = (255, 255, 255) )
+                    img=instagram(img, config)
+                    display_image(img, config)
+                if key3state == False:
+                    logging.info('Invert Display')
+                if key4state == False:
+                    logging.info('Cycle fiat')
+                if (time.time() - lastcoinfetch > float(config['ticker']['updatefrequency'])) or (datapulled==False):
+                    img = Image.new("RGB", (264,176), color = (255, 255, 255) )
+                    img=instagram(img, config)
+                    display_image(img, config)
+                    datapulled = True
+
+
+
+    except IOError as e:
+        logging.info(e)
+    
+    except KeyboardInterrupt:    
+        logging.info("ctrl + c:")
+        epd2in7.epdconfig.module_exit()
+        GPIO.cleanup()
+        exit()
+
 
 if __name__ == '__main__':
     main()
