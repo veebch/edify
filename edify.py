@@ -322,6 +322,7 @@ def main():
                     img = Image.new("RGB", (264,176), color = (255, 255, 255) )
                     img=instagram(img, config)
                     display_image(img, config)
+                    lastcoinfetch = time.time()
                     datapulled = True
 
 
