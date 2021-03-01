@@ -1,2 +1,6 @@
 screen:
-  invert: true
+  invert: false
+ticker:
+  updatefrequency: 30
+instagram:
+  userid: villavolli
