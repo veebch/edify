@@ -109,7 +109,7 @@ def instagram(img,config):
     userdata=requests.get(url, headers=headers).json()
     logobitmap = Image.open(os.path.join(picdir,'instalogo.bmp'))
     followersbitmap= Image.open(os.path.join(picdir,'followers.bmp'))
-    instabitmap= Image.open(os.path.join(picdir,'instagram.bmp'))
+#   instabitmap= Image.open(os.path.join(picdir,'instagram.bmp'))
     print('toot')
     followers=userdata['graphql']['user']['edge_followed_by']['count']
     followersstring =format(int(followers),",")
@@ -121,22 +121,21 @@ def instagram(img,config):
     height= 30
     width= 10
     fontsize=50
-    img, numoflines=writewrappedlines(img,"  "+followersstring,fontsize,y_text,height, width,fontstring)
+    img, numoflines=writewrappedlines(img,followersstring,fontsize,y_text,height, width,fontstring)
     fontstring = "JosefinSans-Regular"
-    y_text= 10
-    height= 30
-    width= 20
-    fontsize=30
-    img, numoflines=writewrappedlines(img,"  @"+username,fontsize,y_text,height, width,fontstring)
-    fontstring = "JosefinSans-Regular"
-    y_text= -35
+    y_text= -30
     height= 30
     width= 20
     fontsize=35
- #   img, numoflines=writewrappedlines(img,"    Follow us!",fontsize,y_text,height, width,fontstring)
-    img.paste(logobitmap,(30,20))
-    img.paste(followersbitmap,(15,130))
-    img.paste(instabitmap,(10,80))
+    img, numoflines=writewrappedlines(img,"       @"+username,fontsize,y_text,height, width,fontstring)
+    fontstring = "JosefinSans-Regular"
+    y_text= 20
+    height= 30
+    width= 20
+    fontsize=25
+    img, numoflines=writewrappedlines(img,"Followers:",fontsize,y_text,height, width,fontstring)
+ #   img.paste(followersbitmap,(25,110))
+    img.paste(logobitmap,(20,20))
     return img, followers
 
 def main():
