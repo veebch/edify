@@ -127,7 +127,7 @@ def instagram(img,config):
     height= 30
     width= 20
     fontsize=35
-    img, numoflines=writewrappedlines(img,"       @"+username,fontsize,y_text,height, width,fontstring)
+    img, numoflines=writewrappedlines(img,"      @"+username,fontsize,y_text,height, width,fontstring)
     fontstring = "JosefinSans-Regular"
     y_text= 20
     height= 30
@@ -135,7 +135,7 @@ def instagram(img,config):
     fontsize=25
     img, numoflines=writewrappedlines(img,"Followers:",fontsize,y_text,height, width,fontstring)
  #   img.paste(followersbitmap,(25,110))
-    img.paste(logobitmap,(20,20))
+    img.paste(logobitmap,(15,17))
     return img, followers
 
 def main():
