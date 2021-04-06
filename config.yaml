@@ -1,6 +1,6 @@
 screen:
   invert: false
 ticker:
-  updatefrequency: 30
+  updatefrequency: 20
 instagram:
-  userid: villavolli
+  userid: villavolli 
