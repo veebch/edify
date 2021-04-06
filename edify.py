@@ -244,7 +244,7 @@ def instagram(img,config):
     print(url)
     print('toot')
     userdata=requests.get(url, headers=headers).json()
-    logobitmap = Image.open(os.path.join(picdir,'villavoli.bmp'))
+    logobitmap = Image.open(os.path.join(picdir,'instalogo.bmp'))
     followersbitmap= Image.open(os.path.join(picdir,'followers.bmp'))
     instabitmap= Image.open(os.path.join(picdir,'instagram.bmp'))
     print('toot')
@@ -258,17 +258,23 @@ def instagram(img,config):
     height= 30
     width= 10
     fontsize=50
-    img, numoflines=writewrappedlines(img,followersstring,fontsize,y_text,height, width,fontstring)
-    fontstring = "JosefinSans-Light"
+    img, numoflines=writewrappedlines(img,"  "+followersstring,fontsize,y_text,height, width,fontstring)
+    fontstring = "JosefinSans-Regular"
     y_text= 10
     height= 30
     width= 20
     fontsize=30
-    img, numoflines=writewrappedlines(img,"@"+username,fontsize,y_text,height, width,fontstring)
-    img.paste(logobitmap,(60,10))
+    img, numoflines=writewrappedlines(img,"  @"+username,fontsize,y_text,height, width,fontstring)
+    fontstring = "JosefinSans-Regular"
+    y_text= -35
+    height= 30
+    width= 20
+    fontsize=35
+ #   img, numoflines=writewrappedlines(img,"    Follow us!",fontsize,y_text,height, width,fontstring)
+    img.paste(logobitmap,(30,20))
     img.paste(followersbitmap,(15,130))
     img.paste(instabitmap,(10,80))
-    return img
+    return img, followers
 
 def main():
 
@@ -297,7 +303,7 @@ def main():
         datapulled=False 
 #       Time of start
         lastcoinfetch = time.time()
-     
+        oldfollowers=0
         while True:
 
             key1state = GPIO.input(key1)
@@ -320,8 +326,11 @@ def main():
                     logging.info('Cycle fiat')
                 if (time.time() - lastcoinfetch > float(config['ticker']['updatefrequency'])) or (datapulled==False):
                     img = Image.new("RGB", (264,176), color = (255, 255, 255) )
-                    img=instagram(img, config)
-                    display_image(img, config)
+                    img, newfollowers=instagram(img, config)
+                    if newfollowers!=oldfollowers:
+                        print("new: "+str(newfollowers) + "old: "+str(oldfollowers))
+                        display_image(img, config)
+                    oldfollowers=newfollowers
                     lastcoinfetch = time.time()
                     datapulled = True
 
@@ -332,6 +341,8 @@ def main():
     
     except KeyboardInterrupt:    
         logging.info("ctrl + c:")
+        img = Image.new("RGB", (264,176), color = (255, 255, 255) )
+        display_image(img, config)
         epd2in7.epdconfig.module_exit()
         GPIO.cleanup()
         exit()
