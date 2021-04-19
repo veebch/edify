@@ -223,6 +223,8 @@ def redditquotes(img):
             source = source.strip()
             source = source.strip("-")
             print(source)
+            draw = ImageDraw.Draw(img) 
+            draw.line((90,140,174,140), fill=255, width=1)
 #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
             _place_text(img,source,0,70,20,"JosefinSans-Light")
         if numline<5:
