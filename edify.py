@@ -1,8 +1,6 @@
 
 from time import sleep
-from PIL import Image, ImageOps
-from PIL import ImageFont
-from PIL import ImageDraw
+from PIL import Image, ImageOps,ImageDraw,ImageFont
 from sys import path
 from waveshare_epd import epd2in7
 import os, random
@@ -58,6 +56,7 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
     draw_y = (img_height - text_height)//2 + y_offset
 
     draw.text((draw_x, draw_y), text, font=font,fill=fill )
+    return 
 
 def writewrappedlines(img,text,fontsize,y_text=0,height=3, width=15,fontstring="Forum-Regular"):
     lines = textwrap.wrap(text, width)
@@ -74,24 +73,24 @@ def by_size(words, size):
 
 def wordaday(img):
     print("get word a day")
-
+    numline=0
     d = feedparser.parse('https://wordsmith.org/awad/rss1.xml')
     wad = d.entries[0].title
     print(wad)
     fontstring="Forum-Regular"
-    y_text=-40
+    y_text=-50
     height= 20
     width= 18
-    fontsize=40
-    img=writewrappedlines(img,wad,fontsize,y_text,height, width,fontstring)
+    fontsize=25
+    img, numline=writewrappedlines(img,wad,fontsize,y_text,height, width,fontstring)
     wadsummary= d.entries[0].summary
     print(wadsummary)
     fontstring="GoudyBookletter1911-Regular"
-    y_text=0
-    height= 20
+    y_text=-20
+    height= 10
     width= 30
-    fontsize=20
-    img=writewrappedlines(img,wadsummary,fontsize,y_text,height, width,fontstring)
+    fontsize=15
+    img, numline=writewrappedlines(img,wadsummary,fontsize,y_text,height, width,fontstring)
     return img
 
 def display_image(display,img, config):
@@ -138,6 +137,100 @@ def instagram(img,config):
     img.paste(logobitmap,(15,17))
     return img, followers
 
+
+def nth_repl(s, sub, repl, n):
+    find = s.find(sub)
+    # If find is not -1 we have found at least one match for the substring
+    i = find != -1
+    # loop util we find the nth or we find no match
+    while find != -1 and i != n:
+        # find + 1 means we start searching from after the last match
+        find = s.find(sub, find + 1)
+        i += 1
+    # If i is equal to n we found nth match so replace
+    if i == n:
+        return s[:find] + repl + s[find+len(sub):]
+    return s
+
+def redditquotes(img):
+    print("get reddit quotes")
+    numline=10
+    quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=week&limit=100'
+    rawquotes = requests.get(quoteurl,headers={'User-agent': 'Chrome'}).json()
+    quotestack = []
+    i=0
+    try:
+        length= len(rawquotes['data']['children'])
+        while i < length:
+            quotestack.append(str(rawquotes['data']['children'][i]['data']['title']))
+            i+=1
+        for key in rawquotes.keys():
+            print(key)
+    except:
+        print('Reddit Does Not Like You')
+
+#   Tidy quotes
+    i=0
+    while i<len(quotestack):
+        result = unicodedata.normalize('NFKD', quotestack[i]).encode('ascii', 'ignore')
+        quotestack[i]=result.decode()
+        i+=1
+    quotestack = by_size(quotestack, 170)
+    
+    while True:
+        quote=random.choice (quotestack)
+    #   Replace fancypants quotes with vanilla quotes
+        quote=re.sub("“", "\"", quote)
+        quote=re.sub("”", "\"", quote)
+        string = quote
+        count = quote.count("\"")
+        print("Count="+str(count))
+        if count >= 2:
+            print("2 or more quotes - split after last one")
+            sub = "\""
+            wanted = "\" ~"
+            n = count
+            quote=nth_repl(quote, sub, wanted, n)
+            print(quote)
+
+        else:
+            matchObj = re.search(r"(\.)\s(\w+)$",quote)
+            if matchObj:
+                quote= re.sub("\.\s*\w+$", " ~ "+matchObj.group(2), quote)
+            matchObj = re.search(r"\((\w+)\)$",quote)
+            if matchObj:
+                quote= re.sub("\(\w+\)$", matchObj.group(1), quote)
+            quote= re.sub("\s+\"\s+", "\"", quote)
+            quote= re.sub("\s+-|\s+—|\s+―", "--", quote)
+
+
+        quote= re.sub("~", "--", quote)
+        splitquote = quote.split("--")
+        quote = splitquote[0]
+
+        quote = quote.strip()
+        quote = quote.strip("\"")
+        quote = quote.strip()
+
+        if splitquote[-1]!=splitquote[0] and len(splitquote[-1])<=25:
+            fontstring = "Rajdhani-Regular"
+            y_text= -60
+            height= 30
+            width= 25
+            fontsize=24
+            img, numline =writewrappedlines(img,quote,fontsize,y_text,height, width,fontstring)
+            source = splitquote[-1]
+            source = source.strip()
+            source = source.strip("-")
+            print(source)
+#           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
+            _place_text(img,source,0,70,20,"JosefinSans-Light")
+        if numline<5:
+            break
+        else:
+            img = Image.new("RGB", (264,176), color = (255, 255, 255) )
+    return img
+
 def main():
 
     try:    
@@ -154,19 +247,16 @@ def main():
         datapulled=False 
 #       Time of start
         lastfetch = time.time()
-        oldfollowers=0
         while True:
 
             if internet():
                 if (time.time() - lastfetch > float(config['ticker']['updatefrequency'])) or (datapulled==False):
                     img = Image.new("RGB", (264,176), color = (255, 255, 255) )
-                    img, newfollowers=instagram(img, config)
-                    if newfollowers!=oldfollowers:
-                        print("new: "+str(newfollowers) + "old: "+str(oldfollowers))
-                        display_image(epd,img, config)
-                    oldfollowers=newfollowers
+                    img = redditquotes(img)
+                    display_image(epd,img, config)
                     lastfetch = time.time()
                     datapulled = True
+            time.sleep(10)
 
 
 
