@@ -94,7 +94,6 @@ def wordaday(img):
     return img
 
 def display_image(display,img, config):
-    img = ImageOps.mirror(img)
     if config['screen']['invert']==True:
         img=ImageOps.invert(img)
     display.display_4Gray(display.getbuffer_4Gray(img))
@@ -213,10 +212,10 @@ def redditquotes(img):
         quote = quote.strip()
 
         if splitquote[-1]!=splitquote[0] and len(splitquote[-1])<=25:
-            fontstring = "Rajdhani-Regular"
+            fontstring = "JosefinSans-Regular"
             y_text= -60
             height= 30
-            width= 25
+            width= 20
             fontsize=24
             img, numline =writewrappedlines(img,quote,fontsize,y_text,height, width,fontstring)
             source = splitquote[-1]
@@ -226,7 +225,7 @@ def redditquotes(img):
             draw = ImageDraw.Draw(img) 
             draw.line((90,140,174,140), fill=255, width=1)
 #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
-            _place_text(img,source,0,70,20,"JosefinSans-Light")
+            _place_text(img,source,0,65,20,"Rajdhani-Regular")
         if numline<5:
             break
         else:
