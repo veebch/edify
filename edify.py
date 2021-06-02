@@ -16,6 +16,8 @@ import yaml
 import socket
 import time
 import simplejson as json
+import RPi.GPIO as GPIO
+import logging
 
 dirname = os.path.dirname(__file__)
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images')
@@ -93,11 +95,16 @@ def wordaday(img):
     img, numline=writewrappedlines(img,wadsummary,fontsize,y_text,height, width,fontstring)
     return img
 
-def display_image(display,img, config):
+def display_image(img, config):
+    epd = epd2in7.EPD()
+    epd.Init_4Gray()
+    GPIO.setmode(GPIO.BCM)
+    logging.info("epd2in7 BTC Frame")
     if config['screen']['invert']==True:
         img=ImageOps.invert(img)
-    display.display_4Gray(display.getbuffer_4Gray(img))
-#    display.sleep()
+    epd.display_4Gray(epd.getbuffer_4Gray(img))
+    logging.info("Putting Display To Sleep")
+    epd.sleep()
 
 def instagram(img,config):
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
@@ -235,14 +242,10 @@ def redditquotes(img):
 def main():
 
     try:    
-        print('Initializing EPD...')
-        epd = epd2in7.EPD()
-        epd.Init_4Gray()
-        logging.info("epd2in7 BTC Frame")
 #       Get the configuration from config.yaml
         with open(configfile) as f:
             config = yaml.load(f, Loader=yaml.FullLoader)
-        logging.info(config)
+        logging.basicConfig(level=logging.DEBUG)
 
 #       Note that there has been no data pull yet
         datapulled=False 
@@ -254,7 +257,7 @@ def main():
                 if (time.time() - lastfetch > float(config['ticker']['updatefrequency'])) or (datapulled==False):
                     img = Image.new("RGB", (264,176), color = (255, 255, 255) )
                     img = redditquotes(img)
-                    display_image(epd,img, config)
+                    display_image(img, config)
                     lastfetch = time.time()
                     datapulled = True
             time.sleep(10)
@@ -269,7 +272,6 @@ def main():
         img = Image.new("RGB", (264,176), color = (255, 255, 255) )
         display_image(img, config)
         epd2in7.epdconfig.module_exit()
-        GPIO.cleanup()
         exit()
 
 
