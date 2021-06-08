@@ -2,5 +2,6 @@ screen:
   invert: false
 ticker:
   updatefrequency: 20
-instagram:
-  userid: villavolli 
+function: 
+  mode: redditquotes, spreadsheetquotes
+  weight: 0 ,1
