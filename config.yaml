@@ -1,7 +1,7 @@
 screen:
   invert: false
 ticker:
-  updatefrequency: 20
+  updatefrequency: 3600
 function: 
   mode: redditquotes, spreadsheetquotes
-  weight: 0 ,1
+  weight: 1,0
