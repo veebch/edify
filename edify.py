@@ -175,7 +175,7 @@ def nth_repl(s, sub, repl, n):
 
 def spreadsheetquotes(img, config):
     try:
-        logging.info("BOOBS")
+        logging.info("Manual File")
         success=True
     except Exception as e:
         message="Data pull/print problem"
