@@ -95,6 +95,19 @@ def wordaday(img):
     img, numline=writewrappedlines(img,wadsummary,fontsize,y_text,height, width,fontstring)
     return img
 
+def initkeys():
+    key1 = 5
+    key2 = 6
+    key3 = 13
+    key4 = 19
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(key1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(key2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(key3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(key4, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    thekeys=[key1,key2,key3,key4]
+    return thekeys
+
 def display_image(img, config):
     epd = epd2in7.EPD()
     epd.Init_4Gray()
@@ -105,6 +118,8 @@ def display_image(img, config):
     epd.display_4Gray(epd.getbuffer_4Gray(img))
     logging.info("Putting Display To Sleep")
     epd.sleep()
+    initkeys()
+    return
 
 def instagram(img,config):
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
@@ -158,94 +173,122 @@ def nth_repl(s, sub, repl, n):
         return s[:find] + repl + s[find+len(sub):]
     return s
 
-def redditquotes(img):
-    print("get reddit quotes")
-    numline=10
-    quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=week&limit=100'
-    rawquotes = requests.get(quoteurl,headers={'User-agent': 'Chrome'}).json()
-    quotestack = []
-    i=0
+def spreadsheetquotes(img, config):
     try:
-        length= len(rawquotes['data']['children'])
-        while i < length:
-            quotestack.append(str(rawquotes['data']['children'][i]['data']['title']))
+        logging.info("BOOBS")
+        success=True
+    except Exception as e:
+        message="Data pull/print problem"
+        pic = beanaproblem(img,str(e))
+        success= False
+        time.sleep(10)
+    return img, success
+
+def redditquotes(img, config):
+    try:
+        print("get reddit quotes")
+        numline=10
+        quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=week&limit=100'
+        rawquotes = requests.get(quoteurl,headers={'User-agent': 'Chrome'}).json()
+        quotestack = []
+        i=0
+        try:
+            length= len(rawquotes['data']['children'])
+            while i < length:
+                quotestack.append(str(rawquotes['data']['children'][i]['data']['title']))
+                i+=1
+            for key in rawquotes.keys():
+                print(key)
+        except:
+            print('Reddit Does Not Like You')
+
+    #   Tidy quotes
+        i=0
+        while i<len(quotestack):
+            result = unicodedata.normalize('NFKD', quotestack[i]).encode('ascii', 'ignore')
+            quotestack[i]=result.decode()
             i+=1
-        for key in rawquotes.keys():
-            print(key)
-    except:
-        print('Reddit Does Not Like You')
+        quotestack = by_size(quotestack, 170)
+        
+        while True:
+            quote=random.choice (quotestack)
+        #   Replace fancypants quotes with vanilla quotes
+            quote=re.sub("“", "\"", quote)
+            quote=re.sub("”", "\"", quote)
+            string = quote
+            count = quote.count("\"")
+            print("Count="+str(count))
+            if count >= 2:
+                print("2 or more quotes - split after last one")
+                sub = "\""
+                wanted = "\" ~"
+                n = count
+                quote=nth_repl(quote, sub, wanted, n)
+                print(quote)
 
-#   Tidy quotes
-    i=0
-    while i<len(quotestack):
-        result = unicodedata.normalize('NFKD', quotestack[i]).encode('ascii', 'ignore')
-        quotestack[i]=result.decode()
-        i+=1
-    quotestack = by_size(quotestack, 170)
-    
-    while True:
-        quote=random.choice (quotestack)
-    #   Replace fancypants quotes with vanilla quotes
-        quote=re.sub("“", "\"", quote)
-        quote=re.sub("”", "\"", quote)
-        string = quote
-        count = quote.count("\"")
-        print("Count="+str(count))
-        if count >= 2:
-            print("2 or more quotes - split after last one")
-            sub = "\""
-            wanted = "\" ~"
-            n = count
-            quote=nth_repl(quote, sub, wanted, n)
-            print(quote)
-
-        else:
-            matchObj = re.search(r"(\.)\s(\w+)$",quote)
-            if matchObj:
-                quote= re.sub("\.\s*\w+$", " ~ "+matchObj.group(2), quote)
-            matchObj = re.search(r"\((\w+)\)$",quote)
-            if matchObj:
-                quote= re.sub("\(\w+\)$", matchObj.group(1), quote)
-            quote= re.sub("\s+\"\s+", "\"", quote)
-            quote= re.sub("\s+-|\s+—|\s+―", "--", quote)
+            else:
+                matchObj = re.search(r"(\.)\s(\w+)$",quote)
+                if matchObj:
+                    quote= re.sub("\.\s*\w+$", " ~ "+matchObj.group(2), quote)
+                matchObj = re.search(r"\((\w+)\)$",quote)
+                if matchObj:
+                    quote= re.sub("\(\w+\)$", matchObj.group(1), quote)
+                quote= re.sub("\s+\"\s+", "\"", quote)
+                quote= re.sub("\s+-|\s+—|\s+―", "--", quote)
 
 
-        quote= re.sub("~", "--", quote)
-        splitquote = quote.split("--")
-        quote = splitquote[0]
+            quote= re.sub("~", "--", quote)
+            splitquote = quote.split("--")
+            quote = splitquote[0]
 
-        quote = quote.strip()
-        quote = quote.strip("\"")
-        quote = quote.strip()
+            quote = quote.strip()
+            quote = quote.strip("\"")
+            quote = quote.strip()
 
-        if splitquote[-1]!=splitquote[0] and len(splitquote[-1])<=25:
-            fontstring = "JosefinSans-Regular"
-            y_text= -60
-            height= 30
-            width= 20
-            fontsize=24
-            img, numline =writewrappedlines(img,quote,fontsize,y_text,height, width,fontstring)
-            source = splitquote[-1]
-            source = source.strip()
-            source = source.strip("-")
-            print(source)
-            draw = ImageDraw.Draw(img) 
-            draw.line((90,140,174,140), fill=255, width=1)
-#           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
-            _place_text(img,source,0,65,20,"Rajdhani-Regular")
-        if numline<5:
-            break
-        else:
-            img = Image.new("RGB", (264,176), color = (255, 255, 255) )
-    return img
+            if splitquote[-1]!=splitquote[0] and len(splitquote[-1])<=25:
+                fontstring = "JosefinSans-Regular"
+                y_text= -60
+                height= 30
+                width= 20
+                fontsize=24
+                img, numline =writewrappedlines(img,quote,fontsize,y_text,height, width,fontstring)
+                source = splitquote[-1]
+                source = source.strip()
+                source = source.strip("-")
+                print(source)
+                draw = ImageDraw.Draw(img) 
+                draw.line((90,140,174,140), fill=255, width=1)
+    #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
+                _place_text(img,source,0,65,20,"Rajdhani-Regular")
+            if numline<5:
+                success=True
+                break
+            else:
+                img = Image.new("RGB", (264,176), color = (255, 255, 255) )
+    except Exception as e:
+        message="Data pull/print problem"
+        pic = beanaproblem(img,str(e))
+        success= False
+        time.sleep(10)
+    return img, success
+
+def currencystringtolist(currstring):
+    # Takes the string for currencies in the config.yaml file and turns it into a list
+    curr_list = currstring.split(",")
+    curr_list = [x.strip(' ') for x in curr_list]
+    return curr_list
+
 
 def main():
-
     try:    
 #       Get the configuration from config.yaml
         with open(configfile) as f:
             config = yaml.load(f, Loader=yaml.FullLoader)
         logging.basicConfig(level=logging.DEBUG)
+        my_list = currencystringtolist(config['function']['mode'])
+        weightstring = currencystringtolist(str(config['function']['weight']))
+        weights = [int(i) for i in weightstring]
+        logging.info(my_list)
 
 #       Note that there has been no data pull yet
         datapulled=False 
@@ -255,8 +298,10 @@ def main():
 
             if internet():
                 if (time.time() - lastfetch > float(config['ticker']['updatefrequency'])) or (datapulled==False):
+                    thefunction=random.choices(my_list, weights=weights, k=1)[0]
                     img = Image.new("RGB", (264,176), color = (255, 255, 255) )
-                    img = redditquotes(img)
+                    configsubset = config
+                    img, success = eval(thefunction+"(img,configsubset)")
                     display_image(img, config)
                     lastfetch = time.time()
                     datapulled = True
