@@ -1,5 +1,7 @@
 # The Passive Daily Edification Screen - Codename: Audrey
 
+![Action Shot](/images/thequote.png)
+
 This is a script that uses similar smarts to the [crypto ticker](https://github.com/llvllch/btcticker), but to display lovely quotes from Reddit (r/quotes), a word of the day or a item from a spreadsheet (according to weightings in config file)
 
 # Getting started
@@ -41,6 +43,11 @@ python3 edify.py
 Detatch from the screen session using CTRL-A followed by CTRL-D
 
 The unit will now pull data every 60 minutes and update the display.
+
+## Links
+
+You can buy a fully assembled ticker or frames at [veeb.ch](https://www.veeb.ch/store/p/neverending-quotes)
+
 
 # Troubleshooting
 
