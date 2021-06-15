@@ -22,23 +22,24 @@ sudo python3 setup.py install
 
 Copy the files from this repository onto the Pi, or clone using:
 
-cd ~
+```cd ~
 git clone https://github.com/llvllch/edify.git
 cd edify
+```
 
 Install the required modules using pip:
 
-python3 -m pip install -r requirements.txt
+```python3 -m pip install -r requirements.txt```
 
 If you'd like the script to persist once you close the session, use screen.
 
 Start a screen session:
 
-screen bash
+```screen bash```
 
 Run the script using:
 
-python3 edify.py
+```python3 edify.py```
 
 Detatch from the screen session using CTRL-A followed by CTRL-D
 
