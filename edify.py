@@ -123,44 +123,6 @@ def display_image(img, config):
     initkeys()
     return
 
-def instagram(img,config):
-    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
-    url="https://www.instagram.com/"+config['instagram']['userid']+"/channel/?__a=1"
-    print(url)
-    print('toot')
-    userdata=requests.get(url, headers=headers).json()
-    logobitmap = Image.open(os.path.join(picdir,'instalogo.bmp'))
-    followersbitmap= Image.open(os.path.join(picdir,'followers.bmp'))
-#   instabitmap= Image.open(os.path.join(picdir,'instagram.bmp'))
-    print('toot')
-    followers=userdata['graphql']['user']['edge_followed_by']['count']
-    followersstring =format(int(followers),",")
-    username = userdata['graphql']['user']['username']
-    print('toot')
-    print(followersstring)
-    fontstring = "JosefinSans-Regular"
-    y_text= 60
-    height= 30
-    width= 10
-    fontsize=50
-    img, numoflines=writewrappedlines(img,followersstring,fontsize,y_text,height, width,fontstring)
-    fontstring = "JosefinSans-Regular"
-    y_text= -30
-    height= 30
-    width= 20
-    fontsize=35
-    img, numoflines=writewrappedlines(img,"      @"+username,fontsize,y_text,height, width,fontstring)
-    fontstring = "JosefinSans-Regular"
-    y_text= 20
-    height= 30
-    width= 20
-    fontsize=25
-    img, numoflines=writewrappedlines(img,"Followers:",fontsize,y_text,height, width,fontstring)
- #   img.paste(followersbitmap,(25,110))
-    img.paste(logobitmap,(15,17))
-    return img, followers
-
-
 def nth_repl(s, sub, repl, n):
     find = s.find(sub)
     # If find is not -1 we have found at least one match for the substring
