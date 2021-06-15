@@ -42,6 +42,11 @@ Detatch from the screen session using CTRL-A followed by CTRL-D
 
 The unit will now pull data every 60 minutes and update the display.
 
+## Links
+
+You can buy a fully assembled ticker or frames at [veeb.ch](http://veeb.ch)
+
+
 # Troubleshooting
 
 Some people have had errors on a clean install of Rasbian Lite on Pi. If you do, run:
