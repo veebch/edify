@@ -3,5 +3,5 @@ screen:
 ticker:
   updatefrequency: 3600
 function: 
-  mode: redditquotes, spreadsheetquotes
-  weight: 1,0
+  mode: redditquotes, textfilequotes, wordaday
+  weight: 1,0,0
