@@ -1,4 +1,4 @@
-# The Passive Daily Edification Screen
+# The Passive Daily Edification Screen - Codename: Audrey
 
 This is a script that uses similar smarts to the [crypto ticker](https://github.com/llvllch/btcticker), but to display lovely quotes from reddit, a word of the day or a item from a spreadsheet (weightings in config file)
 
