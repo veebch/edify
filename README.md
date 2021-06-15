@@ -16,7 +16,7 @@ Install the Waveshare Python module following the instructions on their Wiki und
 cd e-Paper/RaspberryPi_JetsonNano/python
 sudo python3 setup.py install
 
-Install & Run
+## Install & Run
 
 Copy the files from this repository onto the Pi, or clone using:
 
