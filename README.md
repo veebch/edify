@@ -44,7 +44,7 @@ The unit will now pull data every 60 minutes and update the display.
 
 ## Links
 
-You can buy a fully assembled ticker or frames at [veeb.ch](http://veeb.ch)
+You can buy a fully assembled ticker or frames at [veeb.ch](https://www.veeb.ch/store/p/neverending-quotes)
 
 
 # Troubleshooting
