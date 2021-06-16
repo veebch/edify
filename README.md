@@ -63,7 +63,7 @@ sudo apt install libatlas-base-dev
 
 and re-run the script.
 
-If the unit is freezing, try switching to another power supply.
+If the unit is freezing, try switching to another power supply. I've lost count of the number of times I've spent half a day trying to debug what turned out to be a dodgy power supply.
 
 # Licencing
 
