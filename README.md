@@ -54,10 +54,12 @@ You can buy a fully assembled Audrey or frames at [veeb.ch](https://www.veeb.ch/
 
 Some people have had errors on a clean install of Rasbian Lite on Pi. If you do, run:
 
+```
 sudo apt-get install libopenjp2-7
 sudo apt-get install libqt5gui5
 sudo apt-get install python-scipy
 sudo apt install libatlas-base-dev
+```
 
 and re-run the script.
 
