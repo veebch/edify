@@ -7,9 +7,9 @@ This is a script that uses similar smarts to the [crypto ticker](https://github.
 # Getting started
 ## Prerequisites
 
-(These instructions assume that your Raspberry Pi is already connected to the Internet, happily running pip and has Python3 installed)
+(These instructions assume that your Raspberry Pi is already connected to the Internet, happily running `pip` and has `python3` installed)
 
-If you are running the Pi headless, connect to your Raspberry Pi using ssh.
+If you are running the Pi headless, connect to your Raspberry Pi using `ssh`.
 
 Install the Waveshare Python module following the instructions on their Wiki under the tab Hardware/Software setup.
 
