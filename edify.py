@@ -23,7 +23,7 @@ import pandas as pd
 dirname = os.path.dirname(__file__)
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images')
 configfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'config.yaml')
-quotesfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'quotes.csv')
+quotesfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'quotes.tsv')
 
 def internet(host="8.8.8.8", port=53, timeout=3):
     """
@@ -146,7 +146,7 @@ def nth_repl(s, sub, repl, n):
 def textfilequotes(img, config):
     success=False
     # Grab The contents of the quotes file, "quotes.csv"
-    data=pd.read_csv(quotesfile, sep=';')
+    data=pd.read_csv(quotesfile, sep='\t')
     print(data.head())
     while True:
         choose=data.sample(replace=True)
