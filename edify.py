@@ -76,26 +76,32 @@ def by_size(words, size):
     return [word for word in words if len(word) <= size]
 
 def wordaday(img, config):
-    print("get word a day")
-    numline=0
-    d = feedparser.parse('https://wordsmith.org/awad/rss1.xml')
-    wad = d.entries[0].title
-    print(wad)
-    fontstring="Forum-Regular"
-    y_text=-50
-    height= 20
-    width= 18
-    fontsize=25
-    img, numline=writewrappedlines(img,wad,fontsize,y_text,height, width,fontstring)
-    wadsummary= d.entries[0].summary
-    print(wadsummary)
-    fontstring="GoudyBookletter1911-Regular"
-    y_text=-20
-    height= 10
-    width= 30
-    fontsize=15
-    img, numline=writewrappedlines(img,wadsummary,fontsize,y_text,height, width,fontstring)
-    return img
+    try:
+        print("get word a day")
+        numline=0
+        d = feedparser.parse('https://wordsmith.org/awad/rss1.xml')
+        wad = d.entries[0].title
+        print(wad)
+        fontstring="Forum-Regular"
+        y_text=-50
+        height= 20
+        width= 18
+        fontsize=25
+        img, numline=writewrappedlines(img,wad,fontsize,y_text,height, width,fontstring)
+        wadsummary= d.entries[0].summary
+        print(wadsummary)
+        fontstring="GoudyBookletter1911-Regular"
+        y_text=-20
+        height= 15
+        width= 30
+        fontsize=15
+        img, numline=writewrappedlines(img,wadsummary,fontsize,y_text,height, width,fontstring)
+        success=True
+    except Exception as e:
+        message="Data pull/print problem"
+        pic = beanaproblem(img,str(e))
+        success= False
+    return img, success
 
 def initkeys():
     key1 = 5
