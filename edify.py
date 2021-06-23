@@ -271,6 +271,16 @@ def currencystringtolist(currstring):
     curr_list = [x.strip(' ') for x in curr_list]
     return curr_list
 
+def beanaproblem(message):
+#   A visual cue that the wheels have fallen off
+    thebean = Image.open(os.path.join(picdir,'thebean.bmp'))
+    image = Image.new('L', (264, 176), 255)    # 255: clear the image with white
+    draw = ImageDraw.Draw(image)
+    image.paste(thebean, (60,45))
+    draw.text((95,15),str(time.strftime("%-H:%M %p, %-d %b %Y")),font =font_date,fill = 0)
+    writewrappedlines(image, "Issue: "+message)
+    return image
+
 
 def main():
     try:    
