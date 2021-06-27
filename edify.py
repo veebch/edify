@@ -297,17 +297,19 @@ def main():
         datapulled=False 
 #       Time of start
         lastfetch = time.time()
+        while internet()==False:
+            logging.info("Waiting for internet")
+            tile.sleep(1)
         while True:
 
-            if internet():
-                if (time.time() - lastfetch > float(config['ticker']['updatefrequency'])) or (datapulled==False):
-                    thefunction=random.choices(my_list, weights=weights, k=1)[0]
-                    img = Image.new("RGB", (264,176), color = (255, 255, 255) )
-                    configsubset = config
-                    img, success = eval(thefunction+"(img,configsubset)")
-                    display_image(img, config)
-                    lastfetch = time.time()
-                    datapulled = True
+            if (time.time() - lastfetch > float(config['ticker']['updatefrequency'])) or (datapulled==False):
+                thefunction=random.choices(my_list, weights=weights, k=1)[0]
+                img = Image.new("RGB", (264,176), color = (255, 255, 255) )
+                configsubset = config
+                img, success = eval(thefunction+"(img,configsubset)")
+                display_image(img, config)
+                lastfetch = time.time()
+                datapulled = True
             time.sleep(10)
 
 
