@@ -23,7 +23,7 @@ import pandas as pd
 dirname = os.path.dirname(__file__)
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images')
 configfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'config.yaml')
-flashfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'country-capitals.tsv')
+flashfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'data/country-capitals.tsv')
 
 def internet(host="8.8.8.8", port=53, timeout=3):
     """
