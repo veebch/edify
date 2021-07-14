@@ -2,7 +2,7 @@
 
 ![Action Shot](/images/thequote.png)
 
-This is a script that uses similar smarts to the [crypto ticker](https://github.com/llvllch/btcticker), but to display randomly-chosen highly-rated quotes from Reddit (r/quotes), a word of the day or a item from a spreadsheet (according to weightings in config file)
+This is a script that uses similar smarts to the [crypto ticker](https://github.com/llvllch/btcticker), but to display randomly-chosen highly-rated **quotes** from Reddit (r/quotes), a **word of the day** or a item from a **flashcard** text file (selected at random, according to weightings in config file `config.yaml`)
 
 # Getting started
 ## Prerequisites
