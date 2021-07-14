@@ -1,4 +1,4 @@
-# The Passive Daily Edification Screen - Codename: Audrey
+# The Passive Edification Screen - Codename: Audrey
 
 ![Action Shot](/images/thequote.png)
 
