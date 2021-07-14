@@ -23,7 +23,7 @@ import pandas as pd
 dirname = os.path.dirname(__file__)
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images')
 configfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'config.yaml')
-quotesfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'quotes.tsv')
+flashfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'country-capitals.tsv')
 
 def internet(host="8.8.8.8", port=53, timeout=3):
     """
@@ -99,7 +99,7 @@ def wordaday(img, config):
         success=True
     except Exception as e:
         message="Data pull/print problem"
-        pic = beanaproblem(img,str(e))
+        pic = beanaproblem(str(e))
         success= False
     return img, success
 
@@ -143,29 +143,32 @@ def nth_repl(s, sub, repl, n):
         return s[:find] + repl + s[find+len(sub):]
     return s
 
-def textfilequotes(img, config):
+def textfileflash(img, config):
     success=False
     # Grab The contents of the quotes file, "quotes.csv"
-    data=pd.read_csv(quotesfile, sep='\t')
+    data=pd.read_csv(flashfile, sep='\t')
     print(data.head())
     while True:
         choose=data.sample(replace=True)
         print(choose)
-        quote=choose.iat[0,0]
-        source=choose.iat[0,1]
+        country=choose.iat[0,0]
+        capital=choose.iat[0,1]
+        continent=choose.iat[0,5]
         try:
             logging.info("Manual File")
-            if  len(source)<=25:
+            if  len(country)<=35:
                 fontstring = "JosefinSans-Regular"
                 y_text= -60
                 height= 30
                 width= 20
                 fontsize=24
-                img, numline =writewrappedlines(img,quote,fontsize,y_text,height, width,fontstring)
+                img, numline =writewrappedlines(img,"Country: "+ country,fontsize,y_text,height, width,fontstring)
+                y_text= 0
+                img, numline2 =writewrappedlines(img,"Capital: "+ capital,fontsize,y_text,height, width,fontstring)
                 draw = ImageDraw.Draw(img) 
                 draw.line((90,140,174,140), fill=255, width=1)
     #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
-                _place_text(img,source,0,65,20,"Rajdhani-Regular")
+                _place_text(img,continent,0,65,20,"Rajdhani-Regular")
             if numline<5:
                 success=True
                 break
@@ -173,7 +176,7 @@ def textfilequotes(img, config):
                 img = Image.new("RGB", (264,176), color = (255, 255, 255) )
         except Exception as e:
             message="Data pull/print problem"
-            pic = beanaproblem(img,str(e))
+            pic = beanaproblem(str(e))
             success= False
     return img, success
 
@@ -260,7 +263,7 @@ def redditquotes(img, config):
                 img = Image.new("RGB", (264,176), color = (255, 255, 255) )
     except Exception as e:
         message="Data pull/print problem"
-        pic = beanaproblem(img,str(e))
+        pic = beanaproblem(str(e))
         success= False
         time.sleep(10)
     return img, success
@@ -301,7 +304,7 @@ def main():
             if (time.time() - lastfetch > float(config['ticker']['updatefrequency'])) or (datapulled==False):
                 if internet()==False:
                     logging.info("Waiting for internet")
-                    thefunction="textfilequotes"
+                    thefunction="textfileflash"
                 else:
                     thefunction=random.choices(my_list, weights=weights, k=1)[0]
                 img = Image.new("RGB", (264,176), color = (255, 255, 255) )
