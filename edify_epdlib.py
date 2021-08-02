@@ -188,9 +188,12 @@ class SIGINT_handler():
 
 
 def wordaday():
+    '''massivly simplified word-a-day'''
     feed = feedparser.parse('https://wordsmith.org/awad/rss1.xml')
     word = feed.entries[0].title
     definition = feed.entries[0].summary
+    
+    #returns a dictionary that is passed to the word-a-day layout object
     return {'word': word, 'definition': definition}
     
     
@@ -202,12 +205,14 @@ def wordaday():
 
 
 def textfileflash():
+    '''massively simplifed version of flashcard function'''
     with open('./data/country-capitals.tsv') as tsv:
         reader = csv.DictReader(tsv, delimiter='\t')
         country_dict = (list(reader))
         
     entry = country_dict[random.randrange(0, len(country_dict))]
     
+    # returns a dictionary that is passed to the textfileflash Layout object
     return {'capitol': f"Capitol: {entry['Capitol']}",
             'country': f"Country: {entry['Country']}",
             'continent': entry['Continent']}
@@ -221,6 +226,7 @@ def textfileflash():
 
 
 def redditquotes():
+    '''very simple reddit quote function'''
     quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=week&limit=100'
     rawquotes = requests.get(quoteurl,headers={'User-agent': 'Chrome'}).json()
     quotestack = []
@@ -233,6 +239,7 @@ def redditquotes():
         if len(quote) < 110:
             break
     
+    # returns a dictionary that is passed to the reditquotes Layout object
     return {'quote': quote}
 
 
@@ -240,53 +247,64 @@ def redditquotes():
 
 
 
-# set the name of the EPD screen here
-# to view all supported types use:
-# $ python -m epdlib.Screen 
-epd = 'epd5in83'
-screen = epdlib.Screen(epd=epd)
+def main():
+    # set the name of the EPD screen here
+    # to view all supported types use:
+    # $ python -m epdlib.Screen 
+    epd = 'epd5in83'
+    
+    # the epdlib.Screen object handles setting the resolution and all of the 
+    # init/writing/clearing for each type of screen 
+    screen = epdlib.Screen(epd=epd)
+
+    # create epdlib.Layout objects that are aware of the resolution of the specified screen
+    # fonts and images are scaled appropriately to match the resolution of the screen
+    l_wad = epdlib.Layout(resolution=screen.resolution, layout=wad_layout)
+    l_tff = epdlib.Layout(resolution=screen.resolution, layout=tff_layout)
+    l_rq = epdlib.Layout(resolution=screen.resolution, layout=rq_layout)
+
+    # allow a CTRL C to break out of running script
+    with InterruptHandler() as h:
+        while True:    
+            # allow a clean way to break out of the loop
+            if h.interrupted:
+                break
+
+            # update the layout using the dictionary from wordaday()
+            l_wad.update_contents(wordaday())
+            # write to the screen
+            screen.writeEPD(l_wad.concat())
+            sleep(2)
+
+            # cludgy way to stop without completing loop
+            if h.interrupted:
+                break        
+
+            # update the layout using the dictionary from textfileflash()
+            l_tff.update_contents(textfileflash())
+            screen.writeEPD(l_tff.concat())
+            sleep(2)
+
+            # cludgy way to stop without completing loop
+            if h.interrupted:
+                break
+
+            # update the layout using the dictionary returned from redditquotes
+            l_rq.update_contents(redditquotes())
+            screen.writeEPD(l_rq.concat())
+            sleep(2)
+    print('cleaning up')
+    screen.clearEPD()
 
 
 
 
 
 
-l_wad = epdlib.Layout(resolution=screen.resolution, layout=wad_layout)
-l_tff = epdlib.Layout(resolution=screen.resolution, layout=tff_layout)
-l_rq = epdlib.Layout(resolution=screen.resolution, layout=rq_layout)
+if __name__ == '__main__':
+    main()
 
 
-
-
-
-
-with InterruptHandler() as h:
-    while True:    
-        # allow a clean way to break out of the loop
-        if h.interrupted:
-            break
-
-        l_wad.update_contents(wordaday())
-        screen.writeEPD(l_wad.concat())
-        sleep(2)
-        
-        # cludgy way to stop without completing loop
-        if h.interrupted:
-            break        
-
-        l_tff.update_contents(textfileflash())
-        screen.writeEPD(l_tff.concat())
-        sleep(2)
-        
-        # cludgy way to stop without completing loop
-        if h.interrupted:
-            break
-
-        l_rq.update_contents(redditquotes())
-        screen.writeEPD(l_rq.concat())
-        sleep(2)
-print('cleaning up')
-screen.clearEPD()
 
 
 
