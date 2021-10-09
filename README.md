@@ -2,6 +2,8 @@
 
 ![Action Shot](/images/thequote.png)
 
+[![YouTube Channel Views](https://img.shields.io/youtube/channel/views/UCz5BOU9J9pB_O0B8-rDjCWQ?label=YouTube&style=social)](https://www.youtube.com/channel/UCz5BOU9J9pB_O0B8-rDjCWQ)
+
 This is a script that uses similar smarts to the [crypto ticker](https://github.com/llvllch/btcticker), but to display randomly-chosen highly-rated **quotes** from Reddit (r/quotes), a **word of the day** or a item from a **flashcard** text file (selected at random, according to weightings in config file `config.yaml`)
 
 # Getting started
