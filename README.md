@@ -49,7 +49,7 @@ The unit will now pull data every 60 minutes and update the display.
 
 ## Links
 
-You can buy a fully assembled Audrey or frames at [veeb.ch](https://www.veeb.ch/store/p/neverending-quotes)
+You can buy a fully assembled Audrey or a frame for one you've built at [veeb.ch](https://www.veeb.ch/store/p/neverending-quotes)
 
 
 # Troubleshooting
