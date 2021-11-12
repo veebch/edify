@@ -1,4 +1,4 @@
-# Passive Brainfood - Codename: Audrey
+# Passive Brainfood - Neverending quotes
 
 ![Action Shot](/images/thequote.png)
 
