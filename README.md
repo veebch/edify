@@ -69,6 +69,10 @@ and re-run the script.
 
 If the unit is freezing, try switching to another power supply. I've lost count of the number of times I've spent half a day trying to debug what turned out to be a dodgy power supply.
 
+# Video
+
+[![Video](https://img.youtube.com/vi/ohNxkvnCpE8/0.jpg)](https://www.youtube.com/watch?v=ohNxkvnCpE8)
+
 # Licencing
 
 GNU GENERAL PUBLIC LICENSE Version 3.0
