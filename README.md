@@ -49,6 +49,34 @@ Detatch from the screen session using CTRL-A followed by CTRL-D
 
 The unit will now pull data every 60 minutes and update the display.
 
+## Add Autostart
+
+```
+cat <<EOF | sudo tee /etc/systemd/system/edify.service
+[Unit]
+Description=edify
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 -u /home/pi/edify/edify.py
+WorkingDirectory=/home/pi/edify/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+Now, simply enable the service you just made and reboot
+```  
+sudo systemctl enable edify.service
+sudo systemctl start edify.service
+
+sudo reboot
+```
+
 ## Links
 
 You can buy a fully assembled Audrey or a frame for one you've built at [veeb.ch](https://www.veeb.ch/store/p/neverending-quotes)
