@@ -47,9 +47,11 @@ Run the script using:
 
 Detatch from the screen session using CTRL-A followed by CTRL-D
 
-The unit will now pull data every 60 minutes and update the display.
+The unit will now pull data every 60 minutes (or whatever is speified in the configuration file) and update the display.
 
 ## Add Autostart
+
+If you'd like the script to start automatically every time it is plugged in:
 
 ```
 cat <<EOF | sudo tee /etc/systemd/system/edify.service
