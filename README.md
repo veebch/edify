@@ -45,7 +45,7 @@ Run the script using:
 
 ```python3 edify.py```
 
-Detatch from the screen session using CTRL-A followed by CTRL-D
+Detach from the screen session using CTRL-A followed by CTRL-D
 
 The unit will now pull data every 60 minutes (or whatever is specified in the configuration file) and update the display.
 
