@@ -51,7 +51,7 @@ The unit will now pull data every 60 minutes (or whatever is specified in the co
 
 ## Add Autostart
 
-If you'd like the script to start automatically every time it is plugged in, you can set up a systemd service with the following:
+If you'd like the script to start automatically every time the Pi is plugged in to a power supply, you can set up a systemd service with the following:
 
 ```
 cat <<EOF | sudo tee /etc/systemd/system/edify.service
