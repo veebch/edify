@@ -26,7 +26,7 @@ Now clone the required software (Waveshare libraries and this script)
 ```
 cd ~
 git clone https://github.com/waveshare/e-Paper
-git clone https://github.com/llvllch/btcticker.git
+git clone https://github.com/veebch/edify.git
 ```
 Move to the `edify` directory, copy the example config to `config.yaml` and move the required part of the waveshare directory to the `edify` directory
 ```
