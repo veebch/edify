@@ -13,22 +13,31 @@ This is a script that uses similar smarts to the [crypto ticker](https://github.
 
 If you are running the Pi headless, connect to your Raspberry Pi using `ssh`.
 
-Install the Waveshare Python module following the instructions on their Wiki under the tab Hardware/Software setup.
-
-(To install the waveshare_epd python module, you need to run the setup file in their repository - also, be sure **not** to install Jetson libraries on a Pi)
+First, enable spi (0=on 1=off)
 
 ```
-cd e-Paper/RaspberryPi_JetsonNano/python
-sudo python3 setup.py install
+sudo raspi-config nonint do_spi 0
 ```
 
 ## Install & Run
 
-Copy the files from this repository onto the Pi, or clone using:
+Now clone the required software (Waveshare libraries and this script)
 
-```cd ~
-git clone https://github.com/llvllch/edify.git
+```
+cd ~
+git clone https://github.com/waveshare/e-Paper
+git clone https://github.com/llvllch/btcticker.git
+```
+Move to the `edify` directory, copy the example config to `config.yaml` and move the required part of the waveshare directory to the `edify` directory
+```
 cd edify
+cp config_example.yaml config.yaml
+cp -r /home/pi/e-Paper/RaspberryPi_JetsonNano/python/lib/waveshare_epd .
+rm -rf /home/pi/e-Paper
+```
+Install the required Python3 modules
+```
+python3 -m pip install -r requirements.txt
 ```
 
 Install the required modules using pip:
