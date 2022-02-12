@@ -4,5 +4,5 @@ ticker:
   updatefrequency: 3600
 function: 
   mode: redditquotes, textfileflash, wordaday
-  weight: 50,2,1
+  weight: 50,0,1
 
