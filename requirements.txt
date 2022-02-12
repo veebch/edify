@@ -3,5 +3,4 @@ feedparser==6.0.2
 requests==2.25.0
 pillow>=8.3.2
 PyYAML==5.4.1
-RPi==0.0.1
 simplejson==3.17.2
