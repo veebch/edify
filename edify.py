@@ -123,6 +123,8 @@ def display_image(img, config):
     logging.info("epd2in7 BTC Frame")
     if config['screen']['invert']==True:
         img=ImageOps.invert(img)
+    if 'flip' in config['screen'] and config['screen']['flip']==True:
+        img=ImageOps.flip(img)
     epd.display_4Gray(epd.getbuffer_4Gray(img))
     logging.info("Putting Display To Sleep")
     epd.sleep()
