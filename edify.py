@@ -125,6 +125,7 @@ def display_image(img, config):
         img=ImageOps.invert(img)
     if 'flip' in config['screen'] and config['screen']['flip']==True:
         img=ImageOps.flip(img)
+        img=ImageOps.mirror(img)
     epd.display_4Gray(epd.getbuffer_4Gray(img))
     logging.info("Putting Display To Sleep")
     epd.sleep()
