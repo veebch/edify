@@ -35,10 +35,6 @@ cp config_example.yaml config.yaml
 cp -r /home/pi/e-Paper/RaspberryPi_JetsonNano/python/lib/waveshare_epd .
 rm -rf /home/pi/e-Paper
 ```
-Install the required Python3 modules
-```
-python3 -m pip install -r requirements.txt
-```
 
 Install the required modules using pip:
 
