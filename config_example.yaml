@@ -1,5 +1,6 @@
 screen:
   invert: false
+  flip: false
 ticker:
   updatefrequency: 3600
 function: 
