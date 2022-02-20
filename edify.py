@@ -185,7 +185,7 @@ def textfileflash(img, config):
             success= False
     return img, success
 
-def jsontoquotestack(jsonquotes,quotestack)
+def jsontoquotestack(jsonquotes,quotestack):
     quotestack = []
     i=0
     try:
