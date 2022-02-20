@@ -214,6 +214,7 @@ def getallquotes(url):
             after='None'
         logging.info(after)
         time.sleep(1)
+    logging.info(len(quotestack))
     return quotestack
 
 def redditquotes(img, config):
