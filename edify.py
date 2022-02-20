@@ -288,7 +288,7 @@ def beanaproblem(message):
     draw = ImageDraw.Draw(image)
     image.paste(thebean, (60,45))
     draw.text((95,15),str(time.strftime("%-H:%M %p, %-d %b %Y")),font =font_date,fill = 0)
-    writewrappedlines(image, "Issue: "+message)
+    writewrappedlines(image, "Issue: "+message,10)
     return image
 
 
