@@ -189,8 +189,9 @@ def getallquotes(url):
     after=str(rawquotes['data']['after'])
     while after!='null':
         newquotes = requests.get(url+'&after='+after,headers={'User-agent': 'Chrome'}).json()
-        rawquotes.update(newquotes)
+        rawquotes=rawquotes.update(newquotes)
         after=str(rawquotes['data']['after'])
+        print("AFTER:"+after)
         time.sleep(1)
     return rawquotes
 
