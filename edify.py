@@ -185,7 +185,7 @@ def jsontoquotestack(jsonquotes,quotestack):
     i=0
     try:
         length= len(jsonquotes['data']['children'])
-        while i < length:
+        while i < length and str(jsonquotes['data']['children'][i]['data']['title'])!='':
             quotestack.append(str(jsonquotes['data']['children'][i]['data']['title']))
             i+=1
     except:
@@ -208,7 +208,7 @@ def getallquotes(url):
             after='None'
         logging.info(after)
         time.sleep(1)
-    string="We got " + str(len(quotestack)) + "quotes."
+    string="We got " + str(len(quotestack)) + " quotes."
     logging.info(string)
     return quotestack
 
