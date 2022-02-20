@@ -211,7 +211,7 @@ def getallquotes(url):
 def redditquotes(img, config):
     try:
         logging.info("get reddit quotes")
-        numline=0
+        numline=10
         quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=week&limit=100'
         quotestack = getallquotes(quoteurl)
     #   Tidy quotes
@@ -221,7 +221,7 @@ def redditquotes(img, config):
             quotestack[i]=result.decode()
             i+=1
         while True:
-            quote=random.choice (quotestack)
+            quote=random.choice(quotestack)
         #   Replace fancypants quotes with vanilla quotes
             quote=re.sub("“", "\"", quote)
             quote=re.sub("”", "\"", quote)
@@ -267,7 +267,7 @@ def redditquotes(img, config):
                 draw.line((90,140,174,140), fill=255, width=1)
     #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
                 _place_text(img,source,0,65,20,"Rajdhani-Regular")
-            if numline<5:
+            if numline<5 and numline >1:
                 success=True
                 break
             else:
