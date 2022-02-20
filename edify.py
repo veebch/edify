@@ -79,11 +79,10 @@ def by_size(words, size):
 
 def wordaday(img, config):
     try:
-        print("get word a day")
+        logging.info("get word a day")
         numline=0
         d = feedparser.parse('https://wordsmith.org/awad/rss1.xml')
         wad = d.entries[0].title
-        print(wad)
         fontstring="Forum-Regular"
         y_text=-50
         height= 20
@@ -91,7 +90,6 @@ def wordaday(img, config):
         fontsize=25
         img, numline=writewrappedlines(img,wad,fontsize,y_text,height, width,fontstring)
         wadsummary= d.entries[0].summary
-        print(wadsummary)
         fontstring="GoudyBookletter1911-Regular"
         y_text=-20
         height= 15
@@ -152,10 +150,8 @@ def textfileflash(img, config):
     success=False
     # Grab The contents of the quotes file, "quotes.csv"
     data=pd.read_csv(flashfile, sep='\t')
-    print(data.head())
     while True:
         choose=data.sample(replace=True)
-        print(choose)
         country=choose.iat[0,0]
         capital=choose.iat[0,1]
         continent=choose.iat[0,5]
@@ -204,7 +200,6 @@ def getallquotes(url):
     rawquotes = requests.get(url,headers={'User-agent': 'Chrome'}).json()
     quotestack = jsontoquotestack(rawquotes, quotestack)
     after=str(rawquotes['data']['after'])
-    print("AFTER:"+after)
     while after!='None':
         newquotes = requests.get(url+'&after='+after,headers={'User-agent': 'Chrome'}).json()
         try:
@@ -238,14 +233,12 @@ def redditquotes(img, config):
             quote=re.sub("”", "\"", quote)
             string = quote
             count = quote.count("\"")
-            print("Count="+str(count))
             if count >= 2:
-                print("2 or more quotes - split after last one")
                 sub = "\""
                 wanted = "\" ~"
                 n = count
                 quote=nth_repl(quote, sub, wanted, n)
-                print(quote)
+                logging.info(quote)
 
             else:
                 matchObj = re.search(r"(\.)\s(\w+)$",quote)
@@ -276,7 +269,6 @@ def redditquotes(img, config):
                 source = splitquote[-1]
                 source = source.strip()
                 source = source.strip("-")
-                print(source)
                 draw = ImageDraw.Draw(img) 
                 draw.line((90,140,174,140), fill=255, width=1)
     #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
