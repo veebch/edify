@@ -183,12 +183,23 @@ def textfileflash(img, config):
             success= False
     return img, success
 
+def getallquotes(url):
+    # This gets all quotes, not just the first 100
+    rawquotes = requests.get(url,headers={'User-agent': 'Chrome'}).json()
+    after=str(rawquotes['data']['after'])
+    while after!='null':
+        newquotes = requests.get(url+'&after='+after,headers={'User-agent': 'Chrome'}).json()
+        rawquotes.update(newquotes)
+        after=str(rawquotes['data']['after'])
+        time.sleep(1)
+    return rawquotes
+
 def redditquotes(img, config):
     try:
         logging.info("get reddit quotes")
-        numline=10
+        numline=0
         quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=week&limit=100'
-        rawquotes = requests.get(quoteurl,headers={'User-agent': 'Chrome'}).json()
+        rawquotes = getallquotes(quoteurl)
         quotestack = []
         i=0
         try:
