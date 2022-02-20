@@ -18,6 +18,7 @@ import time
 import simplejson as json
 import logging
 import pandas as pd
+import RPi.GPIO as GPIO
 from random import randrange
 
 dirname = os.path.dirname(__file__)
@@ -335,7 +336,7 @@ def main():
     
     except KeyboardInterrupt:    
         logging.info("ctrl + c:")
-        img = Image.new("RGB", (264,176), color = (255, 255, 255) )
+        GPIO.setmode(GPIO.BCM)
 #        image=beanaproblem("Keyboard Interrupt")
         image= sleepycloud()
         display_image(image)
