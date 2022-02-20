@@ -185,40 +185,45 @@ def textfileflash(img, config):
             success= False
     return img, success
 
+def jsontoquotestack(jsonquotes,quotestack)
+    quotestack = []
+    i=0
+    try:
+        length= len(jsonquotes['data']['children'])
+        while i < length:
+            quotestack.append(str(jsonquotes['data']['children'][i]['data']['title']))
+            i+=1
+        for key in jsonquotes.keys():
+            print(key)
+    except:
+        logging.info('Reddit Does Not Like You')
+    return quotestack
+
+
 def getallquotes(url):
     # This gets all quotes, not just the first 100
+    quotestack = []
     rawquotes = requests.get(url,headers={'User-agent': 'Chrome'}).json()
+    quotestack = jsontoquotestack(rawquotes, quotestack)
     after=str(rawquotes['data']['after'])
     print("AFTER:"+after)
     while after!='None':
         newquotes = requests.get(url+'&after='+after,headers={'User-agent': 'Chrome'}).json()
-# APPEND
         try:
+            quotestack = jsontoquotestack(rawquotes, quotestack)
             after=str(newquotes['data']['after'])
         except:
             after='None'
         logging.info(after)
         time.sleep(1)
-    return rawquotes
+    return quotestack
 
 def redditquotes(img, config):
     try:
         logging.info("get reddit quotes")
         numline=0
         quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=week&limit=100'
-        rawquotes = getallquotes(quoteurl)
-        quotestack = []
-        i=0
-        try:
-            length= len(rawquotes['data']['children'])
-            while i < length:
-                quotestack.append(str(rawquotes['data']['children'][i]['data']['title']))
-                i+=1
-            for key in rawquotes.keys():
-                print(key)
-        except:
-            print('Reddit Does Not Like You')
-
+        quotestack = getallquotes(quoteurl)
     #   Tidy quotes
         i=0
         while i<len(quotestack):
