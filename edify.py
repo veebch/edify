@@ -185,7 +185,7 @@ def jsontoquotestack(jsonquotes,quotestack):
     i=0
     try:
         length= len(jsonquotes['data']['children'])
-        while i < length and str(jsonquotes['data']['children'][i]['data']['title'])!='':
+        while i < length:
             quotestack.append(str(jsonquotes['data']['children'][i]['data']['title']))
             i+=1
     except:
@@ -225,7 +225,7 @@ def redditquotes(img, config):
             quotestack[i]=result.decode()
             i+=1
         quotestack = by_size(quotestack, 170)
-        
+        logging.info(str(len(quotestack)))
         while True:
             quote=random.choice (quotestack)
         #   Replace fancypants quotes with vanilla quotes
