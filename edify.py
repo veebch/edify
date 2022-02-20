@@ -189,6 +189,7 @@ def getallquotes(url):
     # This gets all quotes, not just the first 100
     rawquotes = requests.get(url,headers={'User-agent': 'Chrome'}).json()
     after=str(rawquotes['data']['after'])
+    print("AFTER:"+after)
     while after!='null':
         newquotes =requests.get(url+'&after='+after,headers={'User-agent': 'Chrome'}).json()
         rawquotes=rawquotes.update(newquotes)
