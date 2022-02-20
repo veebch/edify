@@ -220,7 +220,6 @@ def redditquotes(img, config):
             result = unicodedata.normalize('NFKD', quotestack[i]).encode('ascii', 'ignore')
             quotestack[i]=result.decode()
             i+=1
-        logging.info(str(len(quotestack)))
         while True:
             quote=random.choice (quotestack)
         #   Replace fancypants quotes with vanilla quotes
