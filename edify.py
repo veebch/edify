@@ -192,7 +192,7 @@ def getallquotes(url):
     print("AFTER:"+after)
     while after!='None':
         newquotes = requests.get(url+'&after='+after,headers={'User-agent': 'Chrome'}).json()
-#       APPEND
+        rawquotes = rawquotes.append(newquotes)
         try:
             after=str(newquotes['data']['after'])
         except:
