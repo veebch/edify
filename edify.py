@@ -192,7 +192,8 @@ def getallquotes(url):
     print("AFTER:"+after)
     while after!='None':
         newquotes = requests.get(url+'&after='+after,headers={'User-agent': 'Chrome'}).json()
-#        rawquotes = rawquotes.append(newquotes)   # append this newpage to the previous pages
+        merged_dict = {key: value for (key, value) in (newquotes.items() + rawquotes.items())}
+        rawquotes = json.dumps(merged_dict)
         try:
             after=str(newquotes['data']['after'])
         except:
