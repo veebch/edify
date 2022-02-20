@@ -73,10 +73,6 @@ def writewrappedlines(img,text,fontsize,y_text=0,height=3, width=15,fontstring="
         numoflines+=1
     return img, numoflines
 
-
-def by_size(words, size):
-    return [word for word in words if len(word) <= size]
-
 def wordaday(img, config):
     try:
         logging.info("get word a day")
@@ -224,7 +220,6 @@ def redditquotes(img, config):
             result = unicodedata.normalize('NFKD', quotestack[i]).encode('ascii', 'ignore')
             quotestack[i]=result.decode()
             i+=1
-        quotestack = by_size(quotestack, 100)
         logging.info(str(len(quotestack)))
         while True:
             quote=random.choice (quotestack)
