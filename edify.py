@@ -202,7 +202,7 @@ def getallquotes(url):
     while after!='None':
         newquotes = requests.get(url+'&after='+after,headers={'User-agent': 'Chrome'}).json()
         try:
-            quotestack = jsontoquotestack(rawquotes, quotestack)
+            quotestack = jsontoquotestack(newquotes, quotestack)
             after=str(newquotes['data']['after'])
         except:
             after='None'
