@@ -279,6 +279,24 @@ def redditquotes(img, config):
         time.sleep(10)
     return img, success
 
+def isitacloud():
+    # once in a while it will select an image from the cloud directory. Otherwise, just cloud
+    tossup=randrange(10)
+    if tossup<9:
+        imagename = "cloud.bmp"
+    else:
+        imagename = random.choice(os.listdir(os.path.join(picdir,"cloud"))) 
+    thecloud = Image.open(os.path.join(picdir,"cloud",imagename))
+    image = Image.new('L', (264, 176), 255)    # 255: clear the image with white
+    image.paste(thecloud, (0,0))
+    return image
+
+def sleepycloud():
+    thecloud = Image.open(os.path.join(picdir,'cloudsleep.bmp'))
+    image = Image.new('L', (264, 176), 255)    # 255: clear the image with white
+    image.paste(thecloud, (0,0))
+    return image
+
 def currencystringtolist(currstring):
     # Takes the string for currencies in the config.yaml file and turns it into a list
     curr_list = currstring.split(",")
@@ -297,7 +315,7 @@ def beanaproblem(message):
 
 
 def main():
-    try:    
+    try:  
 #       Get the configuration from config.yaml
         with open(configfile) as f:
             config = yaml.load(f, Loader=yaml.FullLoader)
@@ -305,14 +323,15 @@ def main():
         my_list = currencystringtolist(config['function']['mode'])
         weightstring = currencystringtolist(str(config['function']['weight']))
         weights = [int(i) for i in weightstring]
-        logging.info(my_list)
-
 #       Note that there has been no data pull yet
         datapulled=False 
 #       Time of start
         lastfetch = time.time()
         while True:
             if (time.time() - lastfetch > float(config['ticker']['updatefrequency'])) or (datapulled==False):
+                image=isitacloud()
+                display_image(image)
+                time.sleep(10)
                 if internet()==False:
                     logging.info("Waiting for internet")
                     thefunction="textfileflash"
@@ -321,20 +340,29 @@ def main():
                 img = Image.new("RGB", (264,176), color = (255, 255, 255) )
                 configsubset = config
                 img, success = eval(thefunction+"(img,configsubset)")
-                display_image(img, config)
+                display_image(img)
                 lastfetch = time.time()
                 datapulled = True
             time.sleep(10)
 
-
-
     except IOError as e:
-        logging.info(e)
+        logging.error(e)
+        image=beanaproblem(str(e)+" Line: "+str(e.__traceback__.tb_lineno))
+        display_image(image) 
+
+    except Exception as e:
+        logging.error(e)
+        image=beanaproblem(str(e)+" Line: "+str(e.__traceback__.tb_lineno))
+        display_image(image)    
     
     except KeyboardInterrupt:    
         logging.info("ctrl + c:")
+        GPIO.setmode(GPIO.BCM)
         img = Image.new("RGB", (264,176), color = (255, 255, 255) )
-        display_image(img, config)
+#        image=beanaproblem("Keyboard Interrupt")
+        image= sleepycloud()
+        display_image(image)
+        GPIO.cleanup()
         epd2in7.epdconfig.module_exit()
         exit()
 
