@@ -18,7 +18,8 @@ import time
 import simplejson as json
 import RPi.GPIO as GPIO
 import logging
-import pandas as pd 
+import pandas as pd
+from random import randrange
 
 dirname = os.path.dirname(__file__)
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'images')
