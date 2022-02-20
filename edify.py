@@ -113,20 +113,11 @@ def initkeys():
     thekeys=[key1,key2,key3,key4]
     return thekeys
 
-def display_image(img, config):
+def display_image(img):
     epd = epd2in7.EPD()
     epd.Init_4Gray()
-    GPIO.setmode(GPIO.BCM)
-    logging.info("epd2in7 BTC Frame")
-    if config['screen']['invert']==True:
-        img=ImageOps.invert(img)
-    if 'flip' in config['screen'] and config['screen']['flip']==True:
-        img=ImageOps.flip(img)
-        img=ImageOps.mirror(img)
     epd.display_4Gray(epd.getbuffer_4Gray(img))
-    logging.info("Putting Display To Sleep")
     epd.sleep()
-    initkeys()
     return
 
 def nth_repl(s, sub, repl, n):
