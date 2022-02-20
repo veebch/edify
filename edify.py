@@ -182,7 +182,6 @@ def textfileflash(img, config):
     return img, success
 
 def jsontoquotestack(jsonquotes,quotestack):
-    quotestack = []
     i=0
     try:
         length= len(jsonquotes['data']['children'])
