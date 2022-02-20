@@ -197,7 +197,7 @@ def getallquotes(url):
             after=str(newquotes['data']['after'])
         except:
             after='None'
-        print("AFTER:"+after)
+        logging.info(after)
         time.sleep(1)
     return rawquotes
 
