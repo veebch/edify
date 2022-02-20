@@ -224,7 +224,7 @@ def redditquotes(img, config):
             result = unicodedata.normalize('NFKD', quotestack[i]).encode('ascii', 'ignore')
             quotestack[i]=result.decode()
             i+=1
-        quotestack = by_size(quotestack, 170)
+        quotestack = by_size(quotestack, 100)
         logging.info(str(len(quotestack)))
         while True:
             quote=random.choice (quotestack)
