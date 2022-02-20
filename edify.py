@@ -16,7 +16,6 @@ import yaml
 import socket
 import time
 import simplejson as json
-import RPi.GPIO as GPIO
 import logging
 import pandas as pd
 from random import randrange
@@ -99,19 +98,6 @@ def wordaday(img, config):
         pic = beanaproblem(str(e))
         success= False
     return img, success
-
-def initkeys():
-    key1 = 5
-    key2 = 6
-    key3 = 13
-    key4 = 19
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(key1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(key2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(key3, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(key4, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    thekeys=[key1,key2,key3,key4]
-    return thekeys
 
 def display_image(img):
     epd = epd2in7.EPD()
@@ -349,12 +335,10 @@ def main():
     
     except KeyboardInterrupt:    
         logging.info("ctrl + c:")
-        GPIO.setmode(GPIO.BCM)
         img = Image.new("RGB", (264,176), color = (255, 255, 255) )
 #        image=beanaproblem("Keyboard Interrupt")
         image= sleepycloud()
         display_image(image)
-        GPIO.cleanup()
         epd2in7.epdconfig.module_exit()
         exit()
 
