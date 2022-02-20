@@ -193,8 +193,6 @@ def jsontoquotestack(jsonquotes,quotestack):
         while i < length:
             quotestack.append(str(jsonquotes['data']['children'][i]['data']['title']))
             i+=1
-        for key in jsonquotes.keys():
-            print(key)
     except:
         logging.info('Reddit Does Not Like You')
     return quotestack
