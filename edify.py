@@ -208,7 +208,7 @@ def getallquotes(url):
             after='None'
         logging.info(after)
         time.sleep(1)
-    string="We got " + len(quotestack) + "quotes."
+    string="We got " + str(len(quotestack)) + "quotes."
     logging.info(string)
     return quotestack
 
