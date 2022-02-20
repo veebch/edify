@@ -192,7 +192,7 @@ def getallquotes(url):
     print("AFTER:"+after)
     while after!='None':
         newquotes = requests.get(url+'&after='+after,headers={'User-agent': 'Chrome'}).json()
-        rawquotes = rawquotes.append(newquotes)
+#        rawquotes = rawquotes.append(newquotes)   # append this newpage to the previous pages
         try:
             after=str(newquotes['data']['after'])
         except:
