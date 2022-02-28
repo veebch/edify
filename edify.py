@@ -145,7 +145,7 @@ def textfileflash(img, config):
     #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
                 _place_text(img,continent,0,65,20,"Rajdhani-Regular")
             if numline<5:
-                success=True
+                success=False
                 break
             else:
                 img = Image.new("RGB", (264,176), color = (255, 255, 255) )
