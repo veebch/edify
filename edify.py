@@ -317,10 +317,9 @@ def main():
                     thefunction=random.choices(my_list, weights=weights, k=1)[0]
                 img = Image.new("RGB", (264,176), color = (255, 255, 255) )
                 configsubset = config
-                img, success = eval(thefunction+"(img,configsubset)")
+                img, datapulled = eval(thefunction+"(img,configsubset)")
                 display_image(img)
                 lastfetch = time.time()
-                datapulled = True
             time.sleep(10)
 
     except IOError as e:
