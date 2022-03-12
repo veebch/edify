@@ -145,7 +145,7 @@ def textfileflash(img, config):
     #           _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-Regular"):
                 _place_text(img,continent,0,65,20,"Rajdhani-Regular")
             if numline<5:
-                success=True
+                success=False
                 break
             else:
                 img = Image.new("RGB", (264,176), color = (255, 255, 255) )
@@ -312,15 +312,13 @@ def main():
                 time.sleep(10)
                 if internet()==False:
                     logging.info("Waiting for internet")
-                    thefunction="textfileflash"
                 else:
                     thefunction=random.choices(my_list, weights=weights, k=1)[0]
-                img = Image.new("RGB", (264,176), color = (255, 255, 255) )
-                configsubset = config
-                img, success = eval(thefunction+"(img,configsubset)")
-                display_image(img)
-                lastfetch = time.time()
-                datapulled = True
+                    img = Image.new("RGB", (264,176), color = (255, 255, 255) )
+                    configsubset = config
+                    img, datapulled = eval(thefunction+"(img,configsubset)")
+                    display_image(img)
+                    lastfetch = time.time()
             time.sleep(10)
 
     except IOError as e:
