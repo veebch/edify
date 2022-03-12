@@ -64,7 +64,7 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
     draw.text((draw_x, draw_y), text, font=font,fill=fill )
     return 
 
-def writewrappedlines(img,text,fontsize,y_text=0,height=15, width=25,fontstring="Forum-Regular"):
+def writewrappedlines(img,text,fontsize,y_text=0,height=15, width=35,fontstring="Forum-Regular"):
     lines = textwrap.wrap(text, width)
     numoflines=0
     for line in lines:
@@ -288,7 +288,7 @@ def beanaproblem(message):
     draw = ImageDraw.Draw(image)
     image.paste(thebean, (60,45))
     draw.text((95,15),str(time.strftime("%-H:%M %p, %-d %b %Y")),font =font_date,fill = 0)
-    writewrappedlines(image, "Issue: "+message,10)
+    writewrappedlines(image, "Issue: "+message,10, ytext=20)
     return image
 
 
