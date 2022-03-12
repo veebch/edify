@@ -64,7 +64,7 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
     draw.text((draw_x, draw_y), text, font=font,fill=fill )
     return 
 
-def writewrappedlines(img,text,fontsize,y_text=0,height=3, width=15,fontstring="Forum-Regular"):
+def writewrappedlines(img,text,fontsize,y_text=0,height=15, width=15,fontstring="Forum-Regular"):
     lines = textwrap.wrap(text, width)
     numoflines=0
     for line in lines:
