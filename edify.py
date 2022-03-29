@@ -157,10 +157,13 @@ def textfileflash(img, config):
 
 def jsontoquotestack(jsonquotes,quotestack):
     i=0
+    # hardcoded 'quality' parameter, migrate this to config file after testing
     try:
         length= len(jsonquotes['data']['children'])
+        scorethresh>10
         while i < length:
-            quotestack.append(str(jsonquotes['data']['children'][i]['data']['title']))
+            if jsonquotes['data']['children'][i]['data']['score']>scorethresh:
+                quotestack.append(str(jsonquotes['data']['children'][i]['data']['title']))
             i+=1
     except:
         logging.info('Reddit Does Not Like You')
