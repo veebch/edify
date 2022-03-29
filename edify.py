@@ -193,7 +193,7 @@ def redditquotes(img, config):
     try:
         logging.info("get reddit quotes")
         numline=10
-        quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=week&limit=100'
+        quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=month&limit=100'
         quotestack = getallquotes(quoteurl)
     #   Tidy quotes
         i=0
