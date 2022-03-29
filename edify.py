@@ -238,8 +238,8 @@ def redditquotes(img, config):
                 fontstring = "JosefinSans-Regular"
                 y_text= -60
                 height= 30
-                width= 20
-                fontsize=24
+                width= 24
+                fontsize=20
                 img, numline =writewrappedlines(img,quote,fontsize,y_text,height, width,fontstring)
                 source = splitquote[-1]
                 source = source.strip()
