@@ -160,7 +160,7 @@ def jsontoquotestack(jsonquotes,quotestack):
     # hardcoded 'quality' parameter, migrate this to config file after testing
     try:
         length= len(jsonquotes['data']['children'])
-        scorethresh>10
+        scorethresh=10
         while i < length:
             if jsonquotes['data']['children'][i]['data']['score']>scorethresh:
                 quotestack.append(str(jsonquotes['data']['children'][i]['data']['title']))
