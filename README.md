@@ -40,12 +40,6 @@ Install the required modules using pip:
 
 ```python3 -m pip install -r requirements.txt```
 
-If you'd like the script to persist once you close the session, use screen.
-
-Start a screen session:
-
-```screen bash```
-
 Run the script using:
 
 ```python3 edify.py```
