@@ -38,7 +38,10 @@ rm -rf /home/pi/e-Paper
 
 Install the required modules using pip:
 
-```python3 -m pip install -r requirements.txt```
+```
+sudo apt-get install libatlas-base-dev
+python3 -m pip install -r requirements.txt
+```
 
 Run the script using:
 
