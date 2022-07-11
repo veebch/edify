@@ -313,7 +313,7 @@ def main():
             if (time.time() - lastfetch > float(config['ticker']['updatefrequency'])) or (datapulled==False):
                 image=isitacloud()
                 display_image(image)
-                time.sleep(2)
+                time.sleep(4)
                 if internet()==False:
                     logging.info("Waiting for internet")
                 else:
