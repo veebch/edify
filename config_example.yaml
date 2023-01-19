@@ -4,6 +4,6 @@ screen:
 ticker:
   updatefrequency: 3600
 function: 
-  mode: redditquotes, textfileflash, wordaday
-  weight: 50,0,1
+  mode: redditquotes, textfileflash, wordaday, stoic
+  weight: 50,0,1,10
 
