@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+ 
+# Avoid trampling config
+config.yaml
