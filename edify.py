@@ -45,7 +45,7 @@ def stoic(img, config):
             img, numline =writewrappedlines(img,quotestring,fontsize,y_text,height, width,fontstring)
             draw = ImageDraw.Draw(img) 
             draw.line((90,140,174,140), fill=255, width=1)
-            _place_text(img,sourcestrinh,0,65,20,"Rajdhani-Regular")
+            _place_text(img,sourcestring,0,65,20,"Rajdhani-Regular")
             if numline<5 and numline >0:
                 success=True
                 break
