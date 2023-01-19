@@ -27,6 +27,43 @@ flashfile = os.path.join(os.path.dirname(os.path.realpath(__file__)),'data/count
 fontdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'fonts')
 font_date = ImageFont.truetype(os.path.join(fontdir,'PixelSplitter-Bold.ttf'),11)
 
+def stoic(img, config):
+    try:
+        while True:
+            filename = os.path.join(dirname, 'images/aristotle.png')
+            imlogo = Image.open(filename)
+            resize = 300,300
+            imlogo.thumbnail(resize)
+            numline = -1
+            logging.info("get daily stoic")
+            stoicurl='https://stoic-quotes.com/api/quote'
+            rawquote = requests.get(stoicurl,headers={'User-agent': 'Chrome'}).json()
+            logging.info("got quote")
+            sourcestring=rawquote['author']
+            quotestring=rawquote['text']
+            fontstring = "JosefinSans-Regular"
+            y_text= -60
+            height= 30
+            width= 24
+            fontsize=20
+            img.paste(imlogo,(50, 760)
+            img, numline =writewrappedlines(img,quotestring,fontsize,y_text,height, width,fontstring)
+            draw = ImageDraw.Draw(img) 
+            draw.line((90,140,174,140), fill=255, width=1)
+            _place_text(img,sourcestrinh,0,65,20,"Rajdhani-Regular")
+            if numline<5 and numline >0:
+                success=True
+                break
+            else:
+                img = Image.new("RGB", (264,176), color = (255, 255, 255) )
+    except Exception as e:
+        logging.info(e)
+        message="Interlude due to a data pull/print problem (Daily Stoic)"
+        img = beanaproblem(img, message)
+        success=False
+        time.sleep(10)
+    return img,success
+
 def internet(host="8.8.8.8", port=53, timeout=3):
     """
     Host: 8.8.8.8 (google-public-dns-a.google.com)
