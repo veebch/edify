@@ -30,7 +30,6 @@ font_date = ImageFont.truetype(os.path.join(fontdir,'PixelSplitter-Bold.ttf'),11
 def stoic(img, config):
     try:
         while True:
-            filename = os.path.join(dirname, 'images/aristotle.png')
             imlogo = Image.open(filename)
             resize = 300,300
             imlogo.thumbnail(resize)
@@ -46,7 +45,6 @@ def stoic(img, config):
             height= 30
             width= 24
             fontsize=20
-            img.paste(imlogo,(50, 760)
             img, numline =writewrappedlines(img,quotestring,fontsize,y_text,height, width,fontstring)
             draw = ImageDraw.Draw(img) 
             draw.line((90,140,174,140), fill=255, width=1)
@@ -58,8 +56,8 @@ def stoic(img, config):
                 img = Image.new("RGB", (264,176), color = (255, 255, 255) )
     except Exception as e:
         logging.info(e)
-        message="Interlude due to a data pull/print problem (Daily Stoic)"
-        img = beanaproblem(img, message)
+        message="pull/print problem (Daily Stoic)"
+        img = beanaproblem(message)
         success=False
         time.sleep(10)
     return img,success
