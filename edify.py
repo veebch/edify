@@ -30,9 +30,6 @@ font_date = ImageFont.truetype(os.path.join(fontdir,'PixelSplitter-Bold.ttf'),11
 def stoic(img, config):
     try:
         while True:
-            imlogo = Image.open(filename)
-            resize = 300,300
-            imlogo.thumbnail(resize)
             numline = -1
             logging.info("get daily stoic")
             stoicurl='https://stoic-quotes.com/api/quote'
