@@ -4,6 +4,7 @@ screen:
 ticker:
   updatefrequency: 3600
 function: 
+  quotesurl: https://www.reddit.com/r/quotesporn/top/.json?t=month&limit=100
   mode: redditquotes, textfileflash, wordaday, stoic
   weight: 50,0,1,10
 
