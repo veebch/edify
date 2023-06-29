@@ -225,7 +225,7 @@ def redditquotes(img, config):
     try:
         logging.info("get reddit quotes")
         numline=10
-        quoteurl = 'https://www.reddit.com/r/quotes/top/.json?t=month&limit=100'
+        quoteurl = config['function']['quotesurl']
         quotestack = getallquotes(quoteurl)
     #   Tidy quotes
         i=0
@@ -238,6 +238,9 @@ def redditquotes(img, config):
         #   Replace fancypants quotes with vanilla quotes
             quote=re.sub("“", "\"", quote)
             quote=re.sub("”", "\"", quote)
+        #   Ignore anything in brackets
+            quote=re.sub("\[.*?\]","", quote)
+            quote=re.sub("\(.*?\)","", quote)
             string = quote
             count = quote.count("\"")
             if count >= 2:
