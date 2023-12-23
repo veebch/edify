@@ -82,7 +82,7 @@ sudo systemctl start edify.service
 
 sudo reboot
 ```
-NB, if you set up your Pi with an account name other than 'pi', you'll have to adjust the paths to the execuatble.
+**NB** If you set up your Pi with an account name other than 'pi', you'll have to adjust the paths to the execuatble.
 
 ## Links
 
