@@ -34,8 +34,8 @@ Move to the `edify` directory, copy the example config to `config.yaml` and move
 ```
 cd edify
 cp config_example.yaml config.yaml
-cp -r /home/pi/e-Paper/RaspberryPi_JetsonNano/python/lib/waveshare_epd .
-rm -rf /home/pi/e-Paper
+cp -r ~/e-Paper/RaspberryPi_JetsonNano/python/lib/waveshare_epd .
+rm -rf ~/e-Paper
 ```
 
 Install the required modules using pip:
@@ -82,6 +82,7 @@ sudo systemctl start edify.service
 
 sudo reboot
 ```
+NB, if you set up your Pi with an account name other than 'pi', you'll have to adjust the paths to the execuatble.
 
 ## Links
 
