@@ -15,7 +15,15 @@ This is a script that uses similar smarts to the [crypto ticker](https://github.
 
 If you are running the Pi headless, connect to your Raspberry Pi using `ssh`.
 
-First, enable spi (0=on 1=off)
+Connect to your ticker over ssh and update and install necessary packages
+
+```
+sudo apt-get update
+sudo apt-get install -y python3-pip mc git libopenjp2-7
+sudo apt-get install -y libatlas-base-dev python3-pil python3-numpy python3-matplotlib
+```
+
+then, enable spi (0=on 1=off)
 
 ```
 sudo raspi-config nonint do_spi 0
