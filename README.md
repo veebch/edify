@@ -1,10 +1,10 @@
-# Passive Brainfood - Neverending quotes
-
 ![Action Shot](/images/thequote.png)
 
 [![YouTube Channel Views](https://img.shields.io/youtube/channel/views/UCz5BOU9J9pB_O0B8-rDjCWQ?label=YouTube&style=social)](https://www.youtube.com/channel/UCz5BOU9J9pB_O0B8-rDjCWQ)
 
-This is a script that uses similar smarts to the [crypto ticker](https://github.com/veebch/btcticker), but to display randomly-chosen highly-rated **quotes** from Reddit (r/quotesporn), a **word of the day**, a item from a **flashcard** text file or a **stoic quote** 
+# Passive Brainfood - Neverending quotes
+
+This is a script that uses similar smarts to the [crypto ticker](https://github.com/veebch/btcticker). It displays randomly-chosen highly-rated **quotes** from Reddit (r/quotesporn), a **word of the day**, a item from a **flashcard** text file or a **stoic quote** using a Raspberry Pi Zero and an ePaper screen.
 
 (which of these 4 functions it displays is selected at random, according to weightings in config file `config.yaml`)
 
