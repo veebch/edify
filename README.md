@@ -114,7 +114,7 @@ If the unit is freezing, try switching to another power supply. I've lost count 
 
 # Video
 
-[![Video](https://img.youtube.com/vi/ohNxkvnCpE8/0.jpg)](https://www.youtube.com/watch?v=ohNxkvnCpE8)
+[![Video](/images/thumbnail.png)](https://www.youtube.com/watch?v=ohNxkvnCpE8)
 
 # Licencing
 
