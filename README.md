@@ -4,7 +4,7 @@
 
 # Neverending quotes
 
-A Python script that uses similar smarts to our [crypto ticker](https://github.com/veebch/btcticker). It displays randomly-chosen highly-rated **quotes** from Reddit (r/quotesporn), a **word of the day**, a item from a **flashcard** text file or a **stoic quote** using a Raspberry Pi Zero and an ePaper screen.
+A Python script that uses similar smarts to our [crypto ticker](https://github.com/veebch/btcticker). It displays randomly-chosen highly-rated **quotes** from Reddit (r/quotes), a **word of the day**, a item from a **flashcard** text file or a **stoic quote** using a Raspberry Pi Zero and an ePaper screen.
 
 # Getting started
 ## Prerequisites
