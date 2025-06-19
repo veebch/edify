@@ -156,6 +156,7 @@ def wordaday(img, config):
     return img, success
 
 def display_image(img):
+    global epd2in7
     epd = epd2in7.EPD()
     epd.Init_4Gray()
     epd.display_4Gray(epd.getbuffer_4Gray(img))
