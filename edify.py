@@ -362,8 +362,6 @@ def main():
         with open(configfile) as f:
             config = yaml.load(f, Loader=yaml.FullLoader)
         logging.basicConfig(level=logging.DEBUG)
-        epd = epd2in7.EPD()
-        epd.init()
         my_list = currencystringtolist(config['function']['mode'])
         weightstring = currencystringtolist(str(config['function']['weight']))
         weights = [int(i) for i in weightstring]
