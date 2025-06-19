@@ -37,7 +37,8 @@ import socket
 import time
 import simplejson as json
 import logging
-import pandas as pd
+import pandas as pd 
+import importlib
 from random import randrange
 
 dirname = os.path.dirname(__file__)
@@ -360,10 +361,10 @@ def main():
         with open(configfile) as f:
             config = yaml.load(f, Loader=yaml.FullLoader)
         logging.basicConfig(level=logging.DEBUG)
-        if "version" in config["screen"] and config["screen"]["version"]=="V2":
-          from waveshare_epd import epd2in7_V2 as epd2in7
+        if config.get("screen", {}).get("version") == "V2":
+          epd2in7 = importlib.import_module("waveshare_epd.epd2in7_V2")
         else:
-          from waveshare_epd import epd2in7
+          epd2in7 = importlib.import_module("waveshare_epd.epd2in7")
         my_list = currencystringtolist(config['function']['mode'])
         weightstring = currencystringtolist(str(config['function']['weight']))
         weights = [int(i) for i in weightstring]
