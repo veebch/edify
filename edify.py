@@ -119,7 +119,7 @@ except AttributeError:
     text_width, text_height = draw.textsize(text, font=font)
 
     draw.text((draw_x, draw_y), text, font=font,fill=fill )
-    return 
+
 
 def writewrappedlines(img,text,fontsize,y_text=0,height=15, width=35,fontstring="Forum-Regular"):
     lines = textwrap.wrap(text, width)
