@@ -23,8 +23,6 @@
 from time import sleep
 from PIL import Image, ImageOps,ImageDraw,ImageFont
 from sys import path
-from waveshare_epd import epd2in7
-# from waveshare_epd import epd2in7_V2 as epd2in7 #(comment out line above and uncomment this line if you're using v2)
 import os, random
 import textwrap
 import feedparser
@@ -362,7 +360,7 @@ def main():
         with open(configfile) as f:
             config = yaml.load(f, Loader=yaml.FullLoader)
         logging.basicConfig(level=logging.DEBUG)
-        if 'version' in config['screen'] and config['screen']['version']=='V2':
+        if "version" in config["screen"] and config["screen"]["version"]=="V2":
           from waveshare_epd import epd2in7_V2 as epd2in7
         else:
           from waveshare_epd import epd2in7
