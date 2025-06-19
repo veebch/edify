@@ -102,20 +102,21 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
 
     draw = ImageDraw.Draw(img)
 
-    try:
-      filename = os.path.join(dirname, './fonts/' + fontstring + '.ttf')
-      font = ImageFont.truetype(filename, fontsize)
-    except OSError:
-      font = ImageFont.truetype('/usr/share/fonts/TTF/DejaVuSans.ttf', fontsize)
+try:
+    filename = os.path.join(dirname, './fonts/' + fontstring + '.ttf')
+    font = ImageFont.truetype(filename, fontsize)
+except OSError:
+    font = ImageFont.truetype('/usr/share/fonts/TTF/DejaVuSans.ttf', fontsize)
 
-    img_width, img_height = img.size
-  
-    # Use draw.textbbox instead of font.getbbox
+img_width, img_height = img.size
+
+try:
     bbox = draw.textbbox((0, 0), text, font=font)
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
-    draw_x = (img_width - text_width)//2 + x_offset
-    draw_y = (img_height - text_height)//2 + y_offset
+except AttributeError:
+    # Pillow < 8.0 fallback
+    text_width, text_height = draw.textsize(text, font=font)
 
     draw.text((draw_x, draw_y), text, font=font,fill=fill )
     return 
