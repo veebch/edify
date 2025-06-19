@@ -365,6 +365,8 @@ def main():
           epd2in7 = importlib.import_module("waveshare_epd.epd2in7_V2")
         else:
           epd2in7 = importlib.import_module("waveshare_epd.epd2in7")
+        epd = epd2in7.EPD()
+        epd.init()
         my_list = currencystringtolist(config['function']['mode'])
         weightstring = currencystringtolist(str(config['function']['weight']))
         weights = [int(i) for i in weightstring]
