@@ -362,7 +362,7 @@ def main():
         with open(configfile) as f:
             config = yaml.load(f, Loader=yaml.FullLoader)
         logging.basicConfig(level=logging.DEBUG)
-        if 'screen_version' in config and config['screenname']=='V2':
+        if 'version' in config['screen'] and config['screen']['version']=='V2':
           from waveshare_epd import epd2in7_V2 as epd2in7
         else:
           from waveshare_epd import epd2in7
