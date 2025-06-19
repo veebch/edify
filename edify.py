@@ -1,4 +1,4 @@
-'#!/usr/bin/python3
+#!/usr/bin/python3
 
 """
   edify.py - a script for making a quotes ticker
