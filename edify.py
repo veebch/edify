@@ -17,13 +17,14 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>
- 
+
 """
 
 from time import sleep
 from PIL import Image, ImageOps,ImageDraw,ImageFont
 from sys import path
 from waveshare_epd import epd2in7_V2 as epd2in7
+#from waveshare_epd import epd2in7
 import os, random
 import textwrap
 import feedparser
@@ -38,8 +39,7 @@ import socket
 import time
 import simplejson as json
 import logging
-import pandas as pd 
-import importlib
+import pandas as pd
 from random import randrange
 
 dirname = os.path.dirname(__file__)
@@ -103,21 +103,20 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
     draw = ImageDraw.Draw(img)
 
     try:
-        filename = os.path.join(dirname, './fonts/' + fontstring + '.ttf')
+        filename = os.path.join(dirname, './fonts/'+fontstring+'.ttf')
         font = ImageFont.truetype(filename, fontsize)
     except OSError:
         font = ImageFont.truetype('/usr/share/fonts/TTF/DejaVuSans.ttf', fontsize)
 
     img_width, img_height = img.size
+    text_width = font.getsize(text)[0]
+    text_height = font.getsize(text)[1]
 
-    try:
-        bbox = draw.textbbox((0, 0), text, font=font)
-        text_width = bbox[2] - bbox[0]
-        text_height = bbox[3] - bbox[1]
-    except AttributeError:
-        text_width, text_height = draw.textsize(text, font=font)  # Pillow < 8.0
+    draw_x = (img_width - text_width)//2 + x_offset
+    draw_y = (img_height - text_height)//2 + y_offset
 
-    return img  # or whatever you need to return
+    draw.text((draw_x, draw_y), text, font=font,fill=fill )
+    return 
 
 def writewrappedlines(img,text,fontsize,y_text=0,height=15, width=35,fontstring="Forum-Regular"):
     lines = textwrap.wrap(text, width)
