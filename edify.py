@@ -23,6 +23,7 @@
 from time import sleep
 from PIL import Image, ImageOps,ImageDraw,ImageFont
 from sys import path
+from waveshare_epd import epd2in7_V2 as epd2in7
 import os, random
 import textwrap
 import feedparser
@@ -156,7 +157,6 @@ def wordaday(img, config):
     return img, success
 
 def display_image(img):
-    global epd2in7
     epd = epd2in7.EPD()
     epd.Init_4Gray()
     epd.display_4Gray(epd.getbuffer_4Gray(img))
@@ -362,10 +362,6 @@ def main():
         with open(configfile) as f:
             config = yaml.load(f, Loader=yaml.FullLoader)
         logging.basicConfig(level=logging.DEBUG)
-        if config.get("screen", {}).get("version") == "V2":
-          epd2in7 = importlib.import_module("waveshare_epd.epd2in7_V2")
-        else:
-          epd2in7 = importlib.import_module("waveshare_epd.epd2in7")
         epd = epd2in7.EPD()
         epd.init()
         my_list = currencystringtolist(config['function']['mode'])
