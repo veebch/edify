@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+/#!/usr/bin/python3
 
 """
   edify.py - a script for making a quotes ticker
@@ -103,15 +103,17 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
     draw = ImageDraw.Draw(img)
 
     try:
-        filename = os.path.join(dirname, './fonts/'+fontstring+'.ttf')
-        font = ImageFont.truetype(filename, fontsize)
+      filename = os.path.join(dirname, './fonts/' + fontstring + '.ttf')
+      font = ImageFont.truetype(filename, fontsize)
     except OSError:
-        font = ImageFont.truetype('/usr/share/fonts/TTF/DejaVuSans.ttf', fontsize)
+      font = ImageFont.truetype('/usr/share/fonts/TTF/DejaVuSans.ttf', fontsize)
 
     img_width, img_height = img.size
-    text_width = font.getbbox(text)[2]
-    text_height = font.getbbox(text)[3]
-
+  
+    # Use draw.textbbox instead of font.getbbox
+    bbox = draw.textbbox((0, 0), text, font=font)
+    text_width = bbox[2] - bbox[0]
+    text_height = bbox[3] - bbox[1]
     draw_x = (img_width - text_width)//2 + x_offset
     draw_y = (img_height - text_height)//2 + y_offset
 
