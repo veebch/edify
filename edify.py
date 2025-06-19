@@ -100,26 +100,26 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
     Put some centered text at a location on the image.
     '''
 
-  draw = ImageDraw.Draw(img)
+    draw = ImageDraw.Draw(img)
 
-  try:
-    filename = os.path.join(dirname, './fonts/' + fontstring + '.ttf')
-    font = ImageFont.truetype(filename, fontsize)
-  except OSError:
-    font = ImageFont.truetype('/usr/share/fonts/TTF/DejaVuSans.ttf', fontsize)
+    try:
+      filename = os.path.join(dirname, './fonts/' + fontstring + '.ttf')
+      font = ImageFont.truetype(filename, fontsize)
+    except OSError:
+      font = ImageFont.truetype('/usr/share/fonts/TTF/DejaVuSans.ttf', fontsize)
 
-  img_width, img_height = img.size
+    img_width, img_height = img.size
 
-  try:
-    bbox = draw.textbbox((0, 0), text, font=font)
-    text_width = bbox[2] - bbox[0]
-    text_height = bbox[3] - bbox[1]
-  except AttributeError:
+    try:
+      bbox = draw.textbbox((0, 0), text, font=font)
+      text_width = bbox[2] - bbox[0]
+      text_height = bbox[3] - bbox[1]
+    except AttributeError:
     # Pillow < 8.0 fallback
-    text_width, text_height = draw.textsize(text, font=font)
+      text_width, text_height = draw.textsize(text, font=font)
 
-    draw.text((draw_x, draw_y), text, font=font,fill=fill )
-return
+      draw.text((draw_x, draw_y), text, font=font,fill=fill )
+    return
 
 def writewrappedlines(img,text,fontsize,y_text=0,height=15, width=35,fontstring="Forum-Regular"):
     lines = textwrap.wrap(text, width)
