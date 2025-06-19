@@ -103,23 +103,25 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
     draw = ImageDraw.Draw(img)
 
     try:
-      filename = os.path.join(dirname, './fonts/' + fontstring + '.ttf')
-      font = ImageFont.truetype(filename, fontsize)
+        filename = os.path.join(dirname, './fonts/' + fontstring + '.ttf')
+        font = ImageFont.truetype(filename, fontsize)
     except OSError:
-      font = ImageFont.truetype('/usr/share/fonts/TTF/DejaVuSans.ttf', fontsize)
+        font = ImageFont.truetype('/usr/share/fonts/TTF/DejaVuSans.ttf', fontsize)
 
     img_width, img_height = img.size
 
     try:
-      bbox = draw.textbbox((0, 0), text, font=font)
-      text_width = bbox[2] - bbox[0]
-      text_height = bbox[3] - bbox[1]
+        bbox = draw.textbbox((0, 0), text, font=font)
+        text_width = bbox[2] - bbox[0]
+        text_height = bbox[3] - bbox[1]
+        # For Pillow ≥ 8.0
+        draw.text((draw_x, draw_y), text, font=font, fill=fill)
     except AttributeError:
-    # Pillow < 8.0 fallback
-      text_width, text_height = draw.textsize(text, font=font)
+        # Pillow < 8.0 fallback
+        text_width, text_height = draw.textsize(text, font=font)
+        draw.text((draw_x, draw_y), text, font=font, fill=fill)
 
-      draw.text((draw_x, draw_y), text, font=font,fill=fill )
-    return
+    return img  # or whatever you need to return
 
 def writewrappedlines(img,text,fontsize,y_text=0,height=15, width=35,fontstring="Forum-Regular"):
     lines = textwrap.wrap(text, width)
