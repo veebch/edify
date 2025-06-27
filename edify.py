@@ -116,8 +116,11 @@ def _place_text(img, text, x_offset=0, y_offset=0,fontsize=40,fontstring="Forum-
         text_height = bbox[3] - bbox[1]
     except AttributeError:
         text_width, text_height = draw.textsize(text, font=font)  # Pillow < 8.0
+    draw_x = (img_width - text_width)//2 + x_offset
+    draw_y = (img_height - text_height)//2 + y_offset
 
-    return img  # or whatever you need to return
+    draw.text((draw_x, draw_y), text, font=font,fill=fill )
+    return
 
 def writewrappedlines(img,text,fontsize,y_text=0,height=15, width=35,fontstring="Forum-Regular"):
     lines = textwrap.wrap(text, width)
